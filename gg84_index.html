@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GG84 — Secure Private Protocol</title>
+  <meta name="description" content="GG84 è un protocollo di comunicazione serverless che mostra la crittografia direttamente all’utente." />
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: rgba(255,255,255,0.06);
+      --panel-strong: rgba(255,255,255,0.08);
+      --text: #f5f7f5;
+      --muted: #acb4ac;
+      --line: rgba(57, 231, 95, 0.18);
+      --green: #39e75f;
+      --green-soft: rgba(57, 231, 95, 0.12);
+      --shadow: 0 30px 80px rgba(0,0,0,0.45);
+      --radius: 24px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(57,231,95,0.12), transparent 24%),
+        radial-gradient(circle at 90% 12%, rgba(57,231,95,0.09), transparent 20%),
+        radial-gradient(circle at 50% 100%, rgba(57,231,95,0.08), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.48), rgba(0,0,0,0.08));
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img, video { display: block; max-width: 100%; }
+
+    .wrap { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; position: relative; z-index: 1; }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(14px);
+      background: rgba(5,5,5,0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 76px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      box-shadow: 0 0 26px rgba(57, 231, 95, 0.28);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .btn, .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .btn {
+      background: var(--green);
+      color: #041008;
+      box-shadow: 0 12px 40px rgba(57, 231, 95, 0.28);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .btn:hover, .btn-secondary:hover { transform: translateY(-1px); }
+
+    .hero { padding: 84px 0 62px; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(57, 231, 95, 0.08);
+      color: #c9f7d3;
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.7rem, 5vw, 5.4rem);
+      line-height: 0.96;
+      letter-spacing: -0.045em;
+      max-width: 12ch;
+    }
+
+    .accent { color: var(--green); text-shadow: 0 0 28px rgba(57,231,95,0.24); }
+
+    .lead {
+      margin: 20px 0 0;
+      max-width: 60ch;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .hero-note {
+      margin-top: 16px;
+      color: #d0d6d0;
+      font-size: 0.95rem;
+    }
+
+    .hero-card,
+    .video-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 30px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-card::before,
+    .video-card::before {
+      content: "";
+      position: absolute;
+      inset: -80px auto auto -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(57,231,95,0.22), transparent 68%);
+      pointer-events: none;
+    }
+
+    .screen {
+      background: #0d0d0d;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .screen-top,
+    .panel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: #dbe2db;
+      font-size: 0.94rem;
+    }
+
+    .dots { display:flex; gap:6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.18); }
+
+    .screen-body {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .bubble, .cipher {
+      padding: 14px 16px;
+      border-radius: 18px;
+      width: fit-content;
+      max-width: 100%;
+      font-size: 1rem;
+    }
+
+    .bubble {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .cipher {
+      background: rgba(57,231,95,0.10);
+      color: #d3ffd9;
+      border: 1px solid rgba(57,231,95,0.22);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      word-break: break-all;
+      box-shadow: inset 0 0 0 1px rgba(57,231,95,0.08);
+    }
+
+    .transit {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .arrow {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(57,231,95,0.12);
+      color: var(--green);
+      border: 1px solid rgba(57,231,95,0.22);
+    }
+
+    .strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .video-shell {
+      background: #0b0b0b;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .video-shell video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .video-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    section { padding: 40px 0; position: relative; z-index: 1; }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 22px;
+    }
+
+    .section-label {
+      display: inline-block;
+      color: var(--green);
+      letter-spacing: 0.12em;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(2rem, 3.3vw, 3.3rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .sub {
+      margin: 14px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 1.03rem;
+    }
+
+    .grid-3, .grid-2, .grid-4 {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      min-height: 100%;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.22rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(57,231,95,0.1);
+      border: 1px solid rgba(57,231,95,0.18);
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 20px;
+    }
+
+    .compare .card { position: relative; overflow: hidden; }
+
+    .compare .card.good::before,
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: auto -60px -60px auto;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(57,231,95,0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .tag.bad { background: rgba(255,255,255,0.06); color: #d5d9d5; }
+    .tag.good { background: rgba(57,231,95,0.14); color: #c9ffd4; }
+
+    .list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .list div {
+      padding: 13px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.05);
+      color: #dde2dd;
+    }
+
+    .philosophy {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .statement {
+      display: grid;
+      gap: 12px;
+      align-content: center;
+    }
+
+    .statement .line {
+      font-size: clamp(1.7rem, 2.8vw, 2.9rem);
+      font-weight: 800;
+      letter-spacing: -0.05em;
+    }
+
+    .statement .line strong { color: var(--green); }
+
+    .social-card {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .social-links a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: #dce4dc;
+    }
+
+    .cta {
+      position: relative;
+      background: linear-gradient(180deg, rgba(57,231,95,0.11), rgba(255,255,255,0.05));
+      border: 1px solid rgba(57,231,95,0.18);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .cta-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+      padding: 34px;
+    }
+
+    .cta h2 { max-width: 11ch; }
+    .cta p { color: #d8e0d8; max-width: 58ch; line-height: 1.8; }
+
+    .footer {
+      padding: 26px 0 40px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 20px;
+    }
+
+    .small-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #dce3dc;
+      font-weight: 700;
+    }
+
+    .small-brand img {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      box-shadow: 0 0 18px rgba(57,231,95,0.22);
+    }
+
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+    @media (max-width: 960px) {
+      .hero-grid,
+      .grid-4,
+      .grid-3,
+      .grid-2,
+      .compare,
+      .philosophy,
+      .cta-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links { display: none; }
+      .hero { padding-top: 56px; }
+      h1, .cta h2 { max-width: none; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { width: min(var(--max), calc(100% - 20px)); }
+      .nav-inner { min-height: 68px; }
+      .brand span:last-child { display: none; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .btn, .btn-secondary { width: 100%; }
+      .statement .line { line-height: 1.05; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top">
+        <img src="logo3.png" alt="Logo GG84" />
+        <span>GG84</span>
+        <span style="color: var(--muted); font-weight: 500;">Secure Private Protocol</span>
+      </a>
+      <div class="nav-links">
+        <a href="#video">Video</a>
+        <a href="#problema">Problema</a>
+        <a href="#soluzione">Soluzione</a>
+        <a href="#funziona">Come funziona</a>
+        <a href="#cta">Contatti</a>
+      </div>
+      <a class="btn-secondary" href="#cta">Scopri GG84</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">🔐 Protocollo serverless • Crittografia visibile</div>
+          <h1>La sicurezza non si promette. <span class="accent">Si vede.</span></h1>
+          <p class="lead">
+            GG84 è un protocollo di comunicazione peer-to-peer serverless che mostra la crittografia direttamente all’utente.
+            Nessuna infrastruttura centrale, nessuna registrazione, nessuna fiducia implicita nei server intermedi.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="#video">Guarda il video</a>
+            <a class="btn-secondary" href="#soluzione">Come funziona</a>
+          </div>
+          <div class="hero-note">Usa canali già esistenti come WhatsApp, Telegram o email. GG84 protegge il contenuto prima dell’invio.</div>
+          <div class="strip">
+            <span class="chip">ECDH</span>
+            <span class="chip">AES-GCM</span>
+            <span class="chip">No backend</span>
+            <span class="chip">Identità locale</span>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="screen">
+            <div class="screen-top">
+              <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+              <div>Anteprima GG84</div>
+              <img src="logo3.png" alt="GG84" style="width:28px;height:28px;border-radius:8px;box-shadow:0 0 16px rgba(57,231,95,0.2);" />
+            </div>
+            <div class="screen-body">
+              <div class="bubble">ciao</div>
+              <div class="transit">
+                <div>Tu vedi il contenuto</div>
+                <div class="arrow">→</div>
+                <div>GG84 lo cifra</div>
+              </div>
+              <div class="cipher">GG84$2$a8F9kL0pQzXk9Jf82N2sH4vL...==</div>
+              <div class="transit">
+                <div>Tu vedi il cifrato</div>
+                <div class="arrow">→</div>
+                <div>Invio su canale esterno</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="video">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-label">Video manifesto</div>
+          <h2>GG84 in movimento.</h2>
+          <p class="sub">Il video promozionale è incorporato direttamente nella landing, così chi arriva capisce subito il contrasto tra promessa di sicurezza e crittografia visibile.</p>
+        </div>
+        <div class="video-card">
+          <div class="video-shell">
+            <div class="panel-top">
+              <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+              <div>GG84 — Promo video</div>
+              <img src="logo3.png" alt="GG84" style="width:28px;height:28px;border-radius:8px;box-shadow:0 0 16px rgba(57,231,95,0.2);" />
+            </div>
+            <video controls playsinline preload="metadata" poster="logo3.png">
+              <source src="gg84.mp4" type="video/mp4" />
+              Il tuo browser non supporta la riproduzione video.
+            </video>
+            <div class="video-meta">
+              <span>Video integrato localmente: <span class="mono">gg84.mp4</span></span>
+              <span>Consigliato anche per demo, pitch e sito vetrina</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="problema">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-label">Problema</div>
+          <h2>Le app ti dicono che è cifrato. Ma tu non lo vedi.</h2>
+          <p class="sub">Nelle chat tradizionali l’utente scrive in chiaro, preme invio e deve fidarsi del sistema. GG84 ribalta questo modello: la sicurezza diventa percepibile, osservabile, verificabile.</p>
+        </div>
+        <div class="compare">
+          <div class="card">
+            <div class="tag bad">Modello tradizionale</div>
+            <h3>La crittografia è invisibile</h3>
+            <p>Il messaggio parte in chiaro dall’interfaccia. La protezione avviene altrove, fuori dalla percezione dell’utente.</p>
+            <div class="list">
+              <div>Scrivi il messaggio</div>
+              <div>Premi invio</div>
+              <div>Ti viene chiesto di fidarti</div>
+            </div>
+          </div>
+          <div class="card good">
+            <div class="tag good">Approccio GG84</div>
+            <h3>La crittografia diventa visibile</h3>
+            <p>Il contenuto viene cifrato prima del trasporto. L’utente vede il ciphertext e capisce cosa sta davvero uscendo dal dispositivo.</p>
+            <div class="list">
+              <div>Scrivi il messaggio</div>
+              <div>Vedi il ciphertext</div>
+              <div>Invii solo contenuto cifrato</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="soluzione">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-label">Soluzione</div>
+          <h2>GG84 rende la crittografia un’esperienza diretta.</h2>
+          <p class="sub">Non è una chat. Non è un backend. È un layer crittografico client-side che può trasformare qualsiasi canale esistente in un canale sicuro.</p>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="icon">01</div>
+            <h3>Identità locale</h3>
+            <p>Ogni utente genera le proprie chiavi localmente. Nessun account centrale, nessuna registrazione, nessuna infrastruttura da fidare.</p>
+          </div>
+          <div class="card">
+            <div class="icon">02</div>
+            <h3>Chiave condivisa</h3>
+            <p>Il pairing avviene tramite invito condiviso. Le chiavi pubbliche vengono scambiate manualmente e il segreto comune viene derivato lato client.</p>
+          </div>
+          <div class="card">
+            <div class="icon">03</div>
+            <h3>Cifratura prima dell’invio</h3>
+            <p>Il messaggio viene cifrato con AES-GCM. Ciò che viene copiato o inoltrato su WhatsApp, Telegram o email è già ciphertext.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="funziona">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-label">Come funziona</div>
+          <h2>Tre passaggi. Nessun server.</h2>
+          <p class="sub">GG84 riduce la complessità per l’utente finale ma conserva una logica crittografica chiara e coerente.</p>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="icon">A</div>
+            <h3>Genera la tua identità</h3>
+            <p>Una coppia di chiavi viene creata nel dispositivo. L’identità è autonoma, locale e indipendente dal cloud.</p>
+          </div>
+          <div class="card">
+            <div class="icon">B</div>
+            <h3>Collegati a un peer</h3>
+            <p>Lo scambio avviene tramite invito manuale. La fingerprint può essere confrontata per rafforzare la verifica dell’identità.</p>
+          </div>
+          <div class="card">
+            <div class="icon">C</div>
+            <h3>Invia solo ciò che vedi</h3>
+            <p>Il messaggio si trasforma in ciphertext prima del trasporto. La percezione della sicurezza è parte del prodotto, non un dettaglio nascosto.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="differenza">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-label">Differenza</div>
+          <h2>Gli altri promettono sicurezza. GG84 te la mostra.</h2>
+          <p class="sub">La forza del progetto non è soltanto tecnica. È comunicativa, psicologica e strategica: sposta la fiducia dall’infrastruttura all’utente.</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Perché è diverso</h3>
+            <p>GG84 nasce per usare servizi terzi come semplice trasporto. Non sostituisce il canale: protegge il contenuto prima che il canale lo veda.</p>
+            <div class="list">
+              <div>Usa app già esistenti come veicolo</div>
+              <div>Non conserva messaggi lato server</div>
+              <div>Può rendere il ciphertext parte dell’esperienza utente</div>
+            </div>
+          </div>
+          <div class="card good">
+            <h3>Perché resta impresso</h3>
+            <p>La sicurezza invisibile si dimentica. La sicurezza visibile si ricorda. GG84 rende memorabile la protezione perché la mette davanti agli occhi.</p>
+            <div class="list">
+              <div>Brand forte e immediato</div>
+              <div>Logo riconoscibile e coerente</div>
+              <div>Messaggio semplice: “Non fidarti. Guarda.”</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap philosophy">
+        <div class="card statement">
+          <div class="section-label">Filosofia</div>
+          <div class="line">Nessun <strong>server</strong>.</div>
+          <div class="line">Nessun <strong>account</strong>.</div>
+          <div class="line">Nessuna <strong>fiducia</strong>.</div>
+          <div class="line">Solo <strong>matematica</strong>.</div>
+        </div>
+        <div class="card social-card">
+          <div class="section-label">Brand & social</div>
+          <h3>Presenza coordinata per demo, reel e prodotto</h3>
+          <p>La landing è pronta per essere collegata ai tuoi canali. Ho lasciato pulsanti facili da aggiornare per Instagram, GitHub e demo live.</p>
+          <div class="social-links">
+            <a href="https://instagram.com/gg84spp" target="_blank" rel="noreferrer">Instagram</a>
+            <a href="#" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="#" target="_blank" rel="noreferrer">Demo live</a>
+          </div>
+          <div class="list">
+            <div><span class="mono">GG84$2$...</span> come output condivisibile</div>
+            <div>Video promo integrato per pitch e presentazione</div>
+            <div>Struttura pronta per aggiungere download o waitlist</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-label">Estensioni</div>
+          <h2>Pronta per crescere.</h2>
+          <p class="sub">La pagina include già i punti giusti per evolvere da vetrina a sito prodotto.</p>
+        </div>
+        <div class="grid-4">
+          <div class="card">
+            <div class="icon">↗</div>
+            <h3>Video hero</h3>
+            <p>Il promo è già incorporato nella landing.</p>
+          </div>
+          <div class="card">
+            <div class="icon">IG</div>
+            <h3>Instagram</h3>
+            <p>Pronta per collegarsi al profilo GG84SPP.</p>
+          </div>
+          <div class="card">
+            <div class="icon">GH</div>
+            <h3>GitHub</h3>
+            <p>Placeholder pronto per repository o whitepaper.</p>
+          </div>
+          <div class="card">
+            <div class="icon">DL</div>
+            <h3>Download</h3>
+            <p>Se vuoi, possiamo aggiungere una sezione app o beta.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta">
+      <div class="wrap cta">
+        <div class="cta-inner">
+          <div>
+            <div class="section-label">Call to action</div>
+            <h2>GG84 — la crittografia che puoi vedere.</h2>
+            <p>Se vuoi costruire una comunicazione davvero serverless, partire dalla sola promessa di sicurezza non basta. GG84 prova a fare un passo ulteriore: rendere la cifratura visibile, comprensibile e sotto il controllo dell’utente.</p>
+          </div>
+          <div style="display:grid;gap:12px;min-width:min(100%,280px);">
+            <a class="btn" href="#top">Torna in alto</a>
+            <a class="btn-secondary" href="mailto:hello@example.com">Contatto / Demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div class="small-brand">
+        <img src="logo3.png" alt="GG84" />
+        <span>GG84 — Secure Private Protocol</span>
+      </div>
+      <div>Serverless by design • Privacy-first • Visual encryption UX</div>
+    </div>
+  </footer>
+</body>
+</html>
