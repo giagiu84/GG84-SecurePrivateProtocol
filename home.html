@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GG84 — La privacy che si vede</title>
+<meta name="description" content="GG84 è il primo protocollo di messaggistica serverless dove la crittografia è visibile. Nessun server. Nessun account. Solo matematica."/>
+<meta property="og:title" content="GG84 — La privacy che si vede"/>
+<meta property="og:description" content="Messaggistica end-to-end serverless. Nessuna infrastruttura centrale. Nessuna fiducia implicita."/>
+<meta property="og:image" content="logo3.png"/>
+<link rel="icon" href="logo3.png"/>
+<style>
+/* ── RESET & BASE ──────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  background:#050607;
+  color:#e8ede9;
+  overflow-x:hidden;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+/* ── VARIABLES ────────────────────────────────────────────── */
+:root{
+  --g: #39e75f;
+  --g2: #1db845;
+  --g-glow: rgba(57,231,95,.18);
+  --g-line: rgba(57,231,95,.22);
+  --bg: #050607;
+  --bg2: #080d09;
+  --panel: rgba(255,255,255,.04);
+  --panel2: rgba(255,255,255,.07);
+  --border: rgba(255,255,255,.08);
+  --muted: #8a9e8d;
+  --text: #e8ede9;
+  --max: 1140px;
+  --r: 20px;
+}
+
+/* ── LAYOUT ───────────────────────────────────────────────── */
+.container{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+
+/* ── NAV ──────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  backdrop-filter:blur(20px) saturate(1.4);
+  -webkit-backdrop-filter:blur(20px) saturate(1.4);
+  background:rgba(5,6,7,.8);
+  border-bottom:1px solid var(--border);
+  transition:background .3s;
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  height:68px;gap:24px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem;letter-spacing:.01em}
+.brand img{width:36px;height:36px;border-radius:10px;box-shadow:0 0 20px var(--g-glow)}
+.brand-name{color:var(--text)}
+.brand-tag{color:var(--muted);font-weight:400;font-size:.85rem}
+.nav-links{display:flex;align-items:center;gap:28px;font-size:.9rem;color:var(--muted)}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;border-radius:999px;
+  background:var(--g);color:#03180a;font-weight:700;font-size:.9rem;
+  box-shadow:0 8px 28px rgba(57,231,95,.28);
+  transition:transform .15s,box-shadow .15s;
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 12px 36px rgba(57,231,95,.4)}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero{
+  padding:140px 0 80px;
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(57,231,95,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 10%, rgba(57,231,95,.06) 0%, transparent 60%),
+    var(--bg);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(57,231,95,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(57,231,95,.025) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.5) 20%,rgba(0,0,0,.5) 70%,transparent);
+  pointer-events:none;
+}
+.hero-inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;align-items:center;
+  position:relative;z-index:1;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 14px;border-radius:999px;
+  border:1px solid var(--g-line);
+  background:rgba(57,231,95,.07);
+  color:rgba(57,231,95,.9);font-size:.82rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:22px;
+}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+h1{
+  font-size:clamp(2.8rem,5vw,5rem);
+  line-height:1;letter-spacing:-.045em;
+  font-weight:900;margin-bottom:22px;
+}
+h1 em{color:var(--g);font-style:normal;text-shadow:0 0 40px rgba(57,231,95,.3)}
+.hero-sub{
+  font-size:1.1rem;line-height:1.75;
+  color:var(--muted);max-width:52ch;margin-bottom:36px;
+}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:32px}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 28px;border-radius:999px;
+  background:var(--g);color:#03180a;font-weight:800;font-size:.97rem;
+  box-shadow:0 12px 40px rgba(57,231,95,.3);
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 50px rgba(57,231,95,.45)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 24px;border-radius:999px;
+  border:1px solid var(--border);
+  background:var(--panel);color:var(--text);font-weight:600;font-size:.97rem;
+  transition:border-color .15s,background .15s;
+}
+.btn-ghost:hover{border-color:rgba(255,255,255,.18);background:var(--panel2)}
+.hero-note{font-size:.85rem;color:var(--muted)}
+.hero-note span{color:var(--g);font-weight:600}
+
+/* ── PHONE MOCKUP ─────────────────────────────────────────── */
+.mockup-wrap{display:flex;justify-content:center;align-items:center;position:relative}
+.mockup-wrap::before{
+  content:'';position:absolute;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(57,231,95,.18),transparent 70%);
+  filter:blur(40px);pointer-events:none;
+}
+.phone{
+  width:260px;
+  background:#0a0f0b;
+  border-radius:38px;
+  border:1.5px solid rgba(57,231,95,.25);
+  box-shadow:
+    0 40px 80px rgba(0,0,0,.6),
+    0 0 0 1px rgba(255,255,255,.06),
+    inset 0 0 0 1px rgba(57,231,95,.06);
+  overflow:hidden;
+  position:relative;z-index:1;
+}
+.phone-top{
+  background:#060a07;
+  padding:14px 18px 10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.phone-notch{
+  width:80px;height:6px;border-radius:3px;
+  background:rgba(255,255,255,.12);margin:0 auto;
+}
+.phone-status{font-size:.68rem;color:var(--muted)}
+.phone-body{padding:14px;display:grid;gap:10px}
+.phone-header{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:14px;
+  background:rgba(57,231,95,.07);
+  border:1px solid rgba(57,231,95,.15);
+}
+.phone-header img{width:30px;height:30px;border-radius:8px}
+.phone-header-text{font-size:.78rem}
+.phone-header-text strong{display:block;color:var(--text);font-size:.82rem}
+.phone-header-text span{color:var(--g);font-size:.7rem}
+.msg-out{
+  align-self:flex-end;max-width:82%;
+  background:rgba(57,231,95,.12);
+  border:1px solid rgba(57,231,95,.2);
+  border-radius:16px 16px 4px 16px;
+  padding:10px 13px;
+  font-size:.78rem;color:#d3ffd8;
+}
+.msg-in{
+  align-self:flex-start;max-width:88%;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:16px 16px 16px 4px;
+  padding:10px 13px;
+  font-size:.68rem;color:#a0b8a3;
+  font-family:ui-monospace,monospace;
+  word-break:break-all;
+  line-height:1.5;
+}
+.msg-label{font-size:.62rem;color:var(--muted);text-align:center;padding:2px}
+.phone-lock{
+  margin:4px 0;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(57,231,95,.05);
+  border:1px solid rgba(57,231,95,.12);
+  display:flex;align-items:center;gap:10px;
+  font-size:.73rem;color:var(--muted);
+}
+.lock-icon{font-size:1.1rem}
+
+/* ── TRUST STRIP ──────────────────────────────────────────── */
+.trust{
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:22px 0;
+  background:rgba(57,231,95,.02);
+}
+.trust-inner{
+  display:flex;flex-wrap:wrap;
+  align-items:center;justify-content:center;
+  gap:8px 0;
+}
+.trust-item{
+  display:flex;align-items:center;gap:10px;
+  padding:0 28px;
+  color:var(--muted);font-size:.85rem;font-weight:500;
+}
+.trust-item:not(:last-child){border-right:1px solid var(--border)}
+.trust-item svg{color:var(--g);flex-shrink:0}
+.trust-item strong{color:var(--text)}
+
+/* ── SECTION BASE ─────────────────────────────────────────── */
+section{padding:88px 0;position:relative}
+.section-kicker{
+  display:inline-block;
+  font-size:.75rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--g);margin-bottom:14px;
+}
+h2{
+  font-size:clamp(2rem,3.5vw,3.2rem);
+  line-height:1.05;letter-spacing:-.04em;
+  font-weight:900;margin-bottom:16px;
+}
+.section-sub{
+  font-size:1.05rem;color:var(--muted);
+  line-height:1.75;max-width:60ch;
+}
+.centered{text-align:center}
+.centered .section-sub{margin:0 auto}
+
+/* ── PROBLEM / SOLUTION ───────────────────────────────────── */
+.prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px}
+.prob-card{
+  border-radius:var(--r);padding:28px;
+  border:1px solid var(--border);background:var(--panel);
+}
+.prob-card.good{
+  border-color:rgba(57,231,95,.22);
+  background:rgba(57,231,95,.04);
+  position:relative;overflow:hidden;
+}
+.prob-card.good::before{
+  content:'';position:absolute;inset:-80px auto auto -80px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(57,231,95,.12),transparent 70%);
+  pointer-events:none;
+}
+.prob-tag{
+  display:inline-block;padding:5px 12px;border-radius:999px;
+  font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:14px;
+}
+.prob-tag.bad{background:rgba(255,255,255,.06);color:#c8d0c8}
+.prob-tag.ok{background:rgba(57,231,95,.12);color:#a8ffc0}
+.prob-card h3{font-size:1.15rem;margin-bottom:10px;font-weight:700}
+.prob-card p{font-size:.92rem;color:var(--muted);line-height:1.7}
+.step-list{display:grid;gap:8px;margin-top:18px}
+.step-row{
+  padding:11px 14px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  font-size:.87rem;color:#cdd5cd;
+  display:flex;align-items:center;gap:10px;
+}
+.step-row.hi{
+  background:rgba(57,231,95,.06);border-color:rgba(57,231,95,.16);
+  color:#c2ffd0;
+}
+.step-num{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;
+  background:rgba(57,231,95,.15);color:var(--g);
+  font-size:.7rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ── VIDEO SECTION ────────────────────────────────────────── */
+.video-section{background:var(--bg2)}
+.video-outer{
+  margin-top:48px;
+  border-radius:24px;overflow:hidden;
+  border:1px solid rgba(57,231,95,.18);
+  box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 60px rgba(57,231,95,.06);
+  position:relative;
+}
+.video-bar{
+  background:#060c07;
+  padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(57,231,95,.12);
+}
+.video-dots{display:flex;gap:7px}
+.video-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.14)}
+.video-title{font-size:.82rem;color:var(--muted);font-weight:500;letter-spacing:.04em}
+.video-badge{
+  font-size:.7rem;font-weight:700;letter-spacing:.08em;
+  color:var(--g);background:rgba(57,231,95,.1);
+  border:1px solid rgba(57,231,95,.2);
+  padding:3px 10px;border-radius:999px;text-transform:uppercase;
+}
+video{
+  width:100%;display:block;background:#000;
+  aspect-ratio:16/9;object-fit:cover;
+}
+.video-caption{
+  background:#060c07;
+  padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(57,231,95,.08);
+  font-size:.82rem;color:var(--muted);
+}
+
+/* ── HOW IT WORKS ─────────────────────────────────────────── */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;position:relative}
+.steps::before{
+  content:'';position:absolute;
+  top:40px;left:calc(100%/6);right:calc(100%/6);
+  height:1px;background:linear-gradient(to right,transparent,var(--g-line),transparent);
+  pointer-events:none;
+}
+.step{
+  padding:28px 24px;border-radius:var(--r);
+  background:var(--panel);border:1px solid var(--border);
+  text-align:center;position:relative;
+}
+.step-icon{
+  width:56px;height:56px;border-radius:18px;
+  background:rgba(57,231,95,.08);border:1px solid rgba(57,231,95,.18);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;font-size:1.5rem;
+}
+.step h3{font-size:1.05rem;font-weight:700;margin-bottom:10px}
+.step p{font-size:.88rem;color:var(--muted);line-height:1.65}
+
+/* ── USE CASES ────────────────────────────────────────────── */
+.use-cases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:48px}
+.uc-card{
+  padding:28px;border-radius:var(--r);
+  background:var(--panel);border:1px solid var(--border);
+  display:flex;gap:20px;align-items:flex-start;
+  transition:border-color .2s,background .2s;
+}
+.uc-card:hover{border-color:rgba(57,231,95,.22);background:rgba(57,231,95,.03)}
+.uc-icon{
+  width:48px;height:48px;border-radius:14px;flex-shrink:0;
+  background:rgba(57,231,95,.08);border:1px solid rgba(57,231,95,.15);
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+}
+.uc-text h3{font-size:1rem;font-weight:700;margin-bottom:8px}
+.uc-text p{font-size:.87rem;color:var(--muted);line-height:1.65}
+.uc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.uc-tag{
+  font-size:.68rem;font-weight:600;letter-spacing:.04em;
+  padding:3px 9px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);
+}
+
+/* ── FEATURES ─────────────────────────────────────────────── */
+.features-section{background:var(--bg2)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.feat{
+  padding:24px;border-radius:var(--r);
+  background:var(--panel);border:1px solid var(--border);
+  transition:border-color .2s;
+}
+.feat:hover{border-color:rgba(57,231,95,.2)}
+.feat-icon{font-size:1.6rem;margin-bottom:14px}
+.feat h3{font-size:.95rem;font-weight:700;margin-bottom:8px}
+.feat p{font-size:.83rem;color:var(--muted);line-height:1.6}
+.feat-badge{
+  display:inline-block;margin-top:10px;
+  font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 8px;border-radius:999px;
+  background:rgba(57,231,95,.1);color:var(--g);border:1px solid rgba(57,231,95,.18);
+}
+
+/* ── COMPARISON ───────────────────────────────────────────── */
+.cmp-table{
+  margin-top:48px;width:100%;
+  border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border);
+}
+.cmp-row{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;
+  border-bottom:1px solid var(--border);
+}
+.cmp-row:last-child{border-bottom:none}
+.cmp-row.header{background:rgba(57,231,95,.05)}
+.cmp-cell{
+  padding:14px 18px;font-size:.88rem;
+  display:flex;align-items:center;
+  border-right:1px solid var(--border);
+}
+.cmp-cell:last-child{border-right:none}
+.cmp-row.header .cmp-cell{
+  font-weight:700;font-size:.78rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);
+}
+.cmp-row.header .cmp-cell.gg84-col{color:var(--g)}
+.cmp-cell.feat-name{font-weight:600;color:var(--text);font-size:.87rem}
+.yes{color:var(--g);font-weight:800;font-size:1rem}
+.no{color:#d94b4b;font-weight:800;font-size:1rem}
+.partial{color:#f2a91b;font-weight:700;font-size:.85rem}
+.cmp-row:nth-child(even){background:rgba(255,255,255,.018)}
+
+/* ── PRICING ──────────────────────────────────────────────── */
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px;max-width:780px;margin-left:auto;margin-right:auto}
+.price-card{
+  padding:32px;border-radius:24px;
+  background:var(--panel);border:1px solid var(--border);
+  position:relative;
+}
+.price-card.featured{
+  background:rgba(57,231,95,.05);
+  border-color:rgba(57,231,95,.3);
+  box-shadow:0 20px 60px rgba(57,231,95,.1);
+}
+.price-label{
+  font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:12px;
+}
+.price-label.green{color:var(--g)}
+.price-amount{
+  font-size:2.8rem;font-weight:900;letter-spacing:-.04em;
+  color:var(--text);line-height:1;margin-bottom:4px;
+}
+.price-amount span{font-size:1rem;font-weight:500;color:var(--muted)}
+.price-desc{font-size:.87rem;color:var(--muted);margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.price-features{display:grid;gap:10px;margin-bottom:28px}
+.pf{display:flex;align-items:center;gap:10px;font-size:.88rem}
+.pf-icon{color:var(--g);font-weight:800;width:18px;flex-shrink:0}
+.pf-text{color:#cdd4cd}
+.pf-text s{color:var(--muted)}
+.price-btn{
+  display:block;width:100%;text-align:center;
+  padding:13px;border-radius:999px;
+  font-weight:700;font-size:.95rem;
+  transition:transform .15s,box-shadow .15s;
+}
+.price-btn.primary{
+  background:var(--g);color:#03180a;
+  box-shadow:0 8px 28px rgba(57,231,95,.28);
+}
+.price-btn.primary:hover{transform:translateY(-1px);box-shadow:0 14px 36px rgba(57,231,95,.4)}
+.price-btn.secondary{
+  border:1px solid var(--border);background:transparent;color:var(--text);
+}
+.price-btn.secondary:hover{background:var(--panel2);border-color:rgba(255,255,255,.15)}
+.featured-badge{
+  position:absolute;top:-1px;right:28px;
+  background:var(--g);color:#03180a;
+  font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 14px;border-radius:0 0 12px 12px;
+}
+
+/* ── CTA FINAL ────────────────────────────────────────────── */
+.cta-section{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 100%, rgba(57,231,95,.12),transparent 70%),
+    var(--bg);
+  text-align:center;padding:100px 0;
+}
+.cta-section::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(57,231,95,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(57,231,95,.03) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;
+}
+.cta-section h2{
+  font-size:clamp(2.2rem,4vw,4rem);
+  letter-spacing:-.05em;margin-bottom:18px;
+}
+.cta-section p{
+  font-size:1.1rem;color:var(--muted);max-width:56ch;margin:0 auto 36px;line-height:1.75;
+}
+.cta-buttons{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.play-badge{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:14px 24px;border-radius:16px;
+  background:#111;border:1px solid rgba(255,255,255,.12);color:var(--text);
+  font-weight:600;transition:border-color .2s;
+}
+.play-badge:hover{border-color:rgba(57,231,95,.4)}
+.play-badge-icon{font-size:1.8rem}
+.play-badge-text small{display:block;font-size:.7rem;color:var(--muted);font-weight:400}
+.play-badge-text strong{font-size:1rem}
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+footer{
+  padding:40px 0;
+  border-top:1px solid var(--border);
+}
+.footer-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:20px;flex-wrap:wrap;
+}
+.footer-brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.footer-brand img{width:28px;height:28px;border-radius:8px;box-shadow:0 0 14px rgba(57,231,95,.2)}
+.footer-links{display:flex;gap:22px;font-size:.88rem;color:var(--muted)}
+.footer-links a:hover{color:var(--text)}
+.footer-copy{font-size:.82rem;color:var(--muted)}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media(max-width:960px){
+  .hero-inner,.prob-grid,.use-cases-grid,.features-grid,
+  .pricing-grid,.cmp-row{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .steps::before{display:none}
+  .nav-links{display:none}
+  .hero{padding-top:110px}
+  h1{font-size:2.6rem}
+  .trust-item:not(:last-child){border-right:none}
+  .cmp-row{grid-template-columns:1fr 1fr}
+  .cmp-cell.hide-m{display:none}
+}
+@media(max-width:600px){
+  section{padding:64px 0}
+  .hero-actions,.cta-buttons{flex-direction:column;align-items:stretch}
+  .btn-primary,.btn-ghost,.nav-cta{width:100%;justify-content:center}
+  .uc-card{flex-direction:column}
+  .footer-inner{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────────────────── -->
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="#top">
+      <img src="logo3.png" alt="GG84"/>
+      <span class="brand-name">GG84</span>
+      <span class="brand-tag">Secure Private Protocol</span>
+    </a>
+    <div class="nav-links">
+      <a href="#come-funziona">Come funziona</a>
+      <a href="#video">Video</a>
+      <a href="#per-chi">Per chi</a>
+      <a href="#pricing">Prezzi</a>
+    </div>
+    <a class="nav-cta" href="#pricing">Scarica l'app</a>
+  </div>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────────────────── -->
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <div>
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Zero server · Zero metadata · Zero fiducia implicita
+      </div>
+      <h1>La privacy non<br>si promette.<br><em>Si dimostra.</em></h1>
+      <p class="hero-sub">
+        GG84 è il primo protocollo di messaggistica dove la crittografia è visibile.
+        Scambi chiavi pubbliche, vedi il ciphertext, lo invii su qualsiasi canale.
+        Nessun backend può essere compromesso perché non esiste.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#pricing">
+          ↓ &nbsp;Scarica gratis
+        </a>
+        <a class="btn-ghost" href="#video">
+          ▶ &nbsp;Guarda il video
+        </a>
+      </div>
+      <p class="hero-note">
+        Disponibile su <span>Android</span> · Crittografia <span>ECDH + AES-GCM</span> · <span>Open protocol</span>
+      </p>
+    </div>
+    <div class="mockup-wrap">
+      <div class="phone">
+        <div class="phone-top">
+          <div style="font-size:.65rem;color:#4a5e4c">09:41</div>
+          <div class="phone-notch"></div>
+          <div class="phone-status">●●●</div>
+        </div>
+        <div class="phone-body">
+          <div class="phone-header">
+            <img src="logo3.png" alt="GG84"/>
+            <div class="phone-header-text">
+              <strong>GG84</strong>
+              <span>● Connessione attiva · verificata</span>
+            </div>
+          </div>
+          <div class="msg-out">ciao, questo è un test</div>
+          <div class="msg-label">↓ GG84 cifra il messaggio</div>
+          <div class="msg-in">GG84$2$a8F9kL0pQzXk9Jf82N2sH4vLmR1Td3WnYqBc6eUj...</div>
+          <div class="phone-lock">
+            <span class="lock-icon">🔐</span>
+            <span style="font-size:.7rem">Solo il destinatario può decifrare</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST STRIP ──────────────────────────────────────────── -->
+<div class="trust">
+  <div class="container trust-inner">
+    <div class="trust-item">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span><strong>ECDH P-256</strong> key exchange</span>
+    </div>
+    <div class="trust-item">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span><strong>AES-GCM 256</strong> encryption</span>
+    </div>
+    <div class="trust-item">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span><strong>Zero server</strong> · nessun backend</span>
+    </div>
+    <div class="trust-item">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span><strong>Identità locale</strong> · nessun account</span>
+    </div>
+    <div class="trust-item">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span><strong>Chiavi distrutte</strong> a fine sessione</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROBLEMA ─────────────────────────────────────────────── -->
+<section id="problema">
+  <div class="container">
+    <div class="section-kicker">Il problema</div>
+    <h2>Le altre app ti dicono<br>che sei protetto.<br>Ma non te lo mostrano.</h2>
+    <p class="section-sub">Con Signal, WhatsApp o Telegram scrivi in chiaro, premi invio, e sei costretto a fidarti di un server che non controlli. GG84 ribalta questo modello.</p>
+    <div class="prob-grid">
+      <div class="prob-card">
+        <div class="prob-tag bad">Modello tradizionale</div>
+        <h3>La crittografia è invisibile</h3>
+        <p>Il messaggio parte dall'interfaccia in chiaro. La protezione avviene su server remoti. Devi fidarti del fornitore — e sperare che non sia compromesso.</p>
+        <div class="step-list">
+          <div class="step-row"><span class="step-num">1</span>Scrivi il messaggio in chiaro</div>
+          <div class="step-row"><span class="step-num">2</span>Premi invio — parte verso un server</div>
+          <div class="step-row"><span class="step-num">3</span>Devi fidarti del sistema</div>
+        </div>
+      </div>
+      <div class="prob-card good">
+        <div class="prob-tag ok">Approccio GG84</div>
+        <h3>La crittografia è visibile</h3>
+        <p>Vedi il ciphertext prima di inviarlo. Capisci cosa sta uscendo dal dispositivo. Non esiste alcun server intermedio da cui dipendere o di cui fidarsi.</p>
+        <div class="step-list">
+          <div class="step-row hi"><span class="step-num" style="background:rgba(57,231,95,.2)">1</span>Scrivi il messaggio</div>
+          <div class="step-row hi"><span class="step-num" style="background:rgba(57,231,95,.2)">2</span>Vedi il ciphertext generato</div>
+          <div class="step-row hi"><span class="step-num" style="background:rgba(57,231,95,.2)">3</span>Invii solo contenuto già cifrato</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VIDEO ────────────────────────────────────────────────── -->
+<section id="video" class="video-section">
+  <div class="container">
+    <div class="centered">
+      <div class="section-kicker">Video manifesto</div>
+      <h2>GG84 in 37 secondi.</h2>
+      <p class="section-sub">Cosa vedi quando la crittografia smette di essere una promessa e diventa un'esperienza.</p>
+    </div>
+    <div class="video-outer">
+      <div class="video-bar">
+        <div class="video-dots">
+          <div class="video-dot"></div>
+          <div class="video-dot"></div>
+          <div class="video-dot"></div>
+        </div>
+        <div class="video-title">GG84 — Secure Private Protocol · Promo</div>
+        <div class="video-badge">● Live</div>
+      </div>
+      <video controls playsinline preload="metadata" poster="logo3.png">
+        <source src="gg84.mp4" type="video/mp4"/>
+        Il tuo browser non supporta la riproduzione video.
+      </video>
+      <div class="video-caption">
+        <span>37 secondi · H.264 · Audio AAC</span>
+        <span style="color:var(--g)">▶ Attiva l'audio per l'esperienza completa</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COME FUNZIONA ────────────────────────────────────────── -->
+<section id="come-funziona">
+  <div class="container">
+    <div class="centered">
+      <div class="section-kicker">Come funziona</div>
+      <h2>Tre passi. Nessun server.<br>Nessun account.</h2>
+      <p class="section-sub">GG84 usa crittografia asimmetrica standard. Le chiavi non lasciano mai il dispositivo. Il segreto si crea tra te e chi decidi tu.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">🔑</div>
+        <h3>Genera la tua identità</h3>
+        <p>Una coppia di chiavi ECDH P-256 viene generata localmente. Nessun account, nessuna registrazione, nessun numero di telefono.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🤝</div>
+        <h3>Collegati al tuo peer</h3>
+        <p>Scambiate inviti tramite qualsiasi canale — email, WhatsApp, QR, NFC. La chiave condivisa si deriva lato client. Nessun server la vede mai.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">📨</div>
+        <h3>Invia solo ciphertext</h3>
+        <p>Il messaggio viene cifrato con AES-GCM prima dell'invio. Chi intercetta il canale vede solo stringhe illeggibili. Solo il destinatario decifra.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PER CHI ───────────────────────────────────────────────── -->
+<section id="per-chi">
+  <div class="container">
+    <div class="section-kicker">Per chi è fatto</div>
+    <h2>Chi ha davvero<br>bisogno di privacy.</h2>
+    <p class="section-sub">Non è per tutti — è per chi capisce che le promesse non bastano e vuole verificare da solo.</p>
+    <div class="use-cases-grid">
+      <div class="uc-card">
+        <div class="uc-icon">📰</div>
+        <div class="uc-text">
+          <h3>Giornalisti e fonti riservate</h3>
+          <p>Quando un server compromesso significa una fonte in pericolo. GG84 non ha server da sequestrare, intercettare o citare in giudizio.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">Zero metadata</span>
+            <span class="uc-tag">No account</span>
+            <span class="uc-tag">Nessuna rubrica esposta</span>
+          </div>
+        </div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-icon">⚖️</div>
+        <div class="uc-text">
+          <h3>Avvocati e clienti</h3>
+          <p>Il segreto professionale non può dipendere da un server americano. Comunicazioni cifrate che non transitano mai da infrastrutture terze.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">GDPR-ready</span>
+            <span class="uc-tag">Segreto professionale</span>
+            <span class="uc-tag">Zero log</span>
+          </div>
+        </div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-icon">🏢</div>
+        <div class="uc-text">
+          <h3>Executive e aziende</h3>
+          <p>M&A, brevetti, strategie. Comunicazioni che se trapelassero avrebbero un costo misurabile. GG84 non ha nessun database da violare.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">M&A</span>
+            <span class="uc-tag">Brevetti</span>
+            <span class="uc-tag">R&D riservato</span>
+          </div>
+        </div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-icon">🛡️</div>
+        <div class="uc-text">
+          <h3>Situazioni di rischio personale</h3>
+          <p>Il <strong style="color:var(--g)">PIN coercizione</strong>: un secondo PIN che simula lo sblocco ma azzera silenziosamente tutto. Pensato per chi può essere costretto a sbloccare il telefono.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">Duress PIN</span>
+            <span class="uc-tag">Wipe automatico</span>
+            <span class="uc-tag">Zero tracce</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ─────────────────────────────────────────────── -->
+<section class="features-section">
+  <div class="container">
+    <div class="centered">
+      <div class="section-kicker">Funzionalità</div>
+      <h2>Sicurezza a più livelli.<br>Visibile da tutti.</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat">
+        <div class="feat-icon">🔐</div>
+        <h3>Lock app + Biometria</h3>
+        <p>PIN 6 cifre e/o impronta digitale. Blocco automatico dopo inattività o rientro da background.</p>
+        <span class="feat-badge">Standard</span>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">⚠️</div>
+        <h3>PIN Coercizione</h3>
+        <p>Un secondo PIN che simula lo sblocco ma cancella identità, chiavi e sessioni. Dall'esterno è indistinguibile.</p>
+        <span class="feat-badge">Esclusiva GG84</span>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🔄</div>
+        <h3>Rotazione identità</h3>
+        <p>A ogni chiusura sessione le chiavi vengono distrutte e una nuova identità viene generata. Forward secrecy assoluta.</p>
+        <span class="feat-badge">Esclusiva GG84</span>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🛑</div>
+        <h3>Lockout escalante</h3>
+        <p>3 PIN sbagliati → 60s di attesa. 6 errati → 120s. 9 errati → wipe totale automatico dell'app.</p>
+        <span class="feat-badge">Anti brute-force</span>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">👁️</div>
+        <h3>Fingerprint visivo</h3>
+        <p>Colore + codice numerico unici per ogni sessione. Verifichi di persona che non ci sia nessun intermediario.</p>
+        <span class="feat-badge">Anti-MITM</span>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📵</div>
+        <h3>Funziona offline</h3>
+        <p>Il pairing avviene via file. I messaggi si cifrano localmente. Non serve connessione internet per l'operazione critica.</p>
+        <span class="feat-badge">Serverless</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMPARISON ───────────────────────────────────────────── -->
+<section>
+  <div class="container">
+    <div class="section-kicker">Confronto</div>
+    <h2>GG84 vs le alternative.</h2>
+    <p class="section-sub">Non è una questione di crittografia — Signal usa crittografia forte. È una questione di chi deve esistere per far funzionare il sistema.</p>
+    <div class="cmp-table">
+      <div class="cmp-row header">
+        <div class="cmp-cell feat-name">Caratteristica</div>
+        <div class="cmp-cell gg84-col">GG84</div>
+        <div class="cmp-cell">Signal</div>
+        <div class="cmp-cell hide-m">WhatsApp</div>
+        <div class="cmp-cell hide-m">Threema</div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-cell feat-name">Serverless reale</div>
+        <div class="cmp-cell"><span class="yes">✓</span></div>
+        <div class="cmp-cell"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-cell feat-name">Nessun numero di telefono</div>
+        <div class="cmp-cell"><span class="yes">✓</span></div>
+        <div class="cmp-cell"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="yes">✓</span></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-cell feat-name">Identità ruotata a ogni sessione</div>
+        <div class="cmp-cell"><span class="yes">✓</span></div>
+        <div class="cmp-cell"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-cell feat-name">PIN coercizione (duress)</div>
+        <div class="cmp-cell"><span class="yes">✓</span></div>
+        <div class="cmp-cell"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-cell feat-name">Nessun metadata centralizzato</div>
+        <div class="cmp-cell"><span class="yes">✓</span></div>
+        <div class="cmp-cell"><span class="partial">parziale</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="partial">parziale</span></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-cell feat-name">Trasporto a scelta dell'utente</div>
+        <div class="cmp-cell"><span class="yes">✓</span></div>
+        <div class="cmp-cell"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-cell feat-name">Funziona senza connessione internet</div>
+        <div class="cmp-cell"><span class="yes">✓</span></div>
+        <div class="cmp-cell"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ──────────────────────────────────────────────── -->
+<section id="pricing" style="background:var(--bg2)">
+  <div class="container">
+    <div class="centered">
+      <div class="section-kicker">Prezzi</div>
+      <h2>Semplice.<br>Trasparente.</h2>
+      <p class="section-sub">La versione gratuita è già completa. Il PRO sblocca messaggi illimitati per chi ne ha bisogno ogni giorno.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-label">Free</div>
+        <div class="price-amount">€0 <span>/ sempre</span></div>
+        <div class="price-desc">Tutte le funzionalità di sicurezza. Senza scadenza.</div>
+        <div class="price-features">
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">5 messaggi cifrati al giorno</span></div>
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">ECDH + AES-GCM completo</span></div>
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">PIN coercizione (duress)</span></div>
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Rotazione identità</span></div>
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Lock app + biometria</span></div>
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Serverless · zero account</span></div>
+        </div>
+        <a class="price-btn secondary" href="#top">Scarica gratis</a>
+      </div>
+      <div class="price-card featured">
+        <div class="featured-badge">Consigliato</div>
+        <div class="price-label green">PRO</div>
+        <div class="price-amount" style="color:var(--g)">€2,99 <span>/ mese</span></div>
+        <div class="price-desc">Per chi usa GG84 come strumento di lavoro quotidiano.</div>
+        <div class="price-features">
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Messaggi cifrati <strong style="color:var(--g)">illimitati</strong></span></div>
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Tutto il piano Free incluso</span></div>
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Priorità sugli aggiornamenti</span></div>
+          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Supporto dedicato</span></div>
+        </div>
+        <a class="price-btn primary" href="#top">Attiva PRO</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ──────────────────────────────────────────────────── -->
+<section class="cta-section" id="download">
+  <div class="container">
+    <div class="section-kicker">Inizia ora</div>
+    <h2>La crittografia che<br><em>puoi vedere.</em></h2>
+    <p>Non fidarti di nessun server — nemmeno del nostro, perché non esiste. Scarica, genera la tua identità, e comincia a proteggere le tue comunicazioni.</p>
+    <div class="cta-buttons">
+      <a class="btn-primary" href="https://play.google.com" target="_blank">
+        ↓ &nbsp;Google Play — Gratis
+      </a>
+      <a class="btn-ghost" href="https://instagram.com/gg84spp" target="_blank">
+        IG &nbsp;@gg84spp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <img src="logo3.png" alt="GG84"/>
+      <span>GG84 — Secure Private Protocol</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://instagram.com/gg84spp" target="_blank">Instagram</a>
+      <a href="#">GitHub</a>
+      <a href="mailto:hello@gg84.it">Contatti</a>
+      <a href="#">Privacy</a>
+    </div>
+    <div class="footer-copy">Serverless by design · Privacy-first · V5_240526</div>
+  </div>
+</footer>
+
+</body>
+</html>
