@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>GG84 — Secure Private Protocol</title>
+
+<style>
+
+:root{
+    --green:#39ff14;
+    --green-soft:#39e75f;
+    --green-glow:rgba(57,231,95,0.18);
+
+    --bg:#000;
+    --text:#e8f5ea;
+    --muted:#7a8c7d;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+
+    background:#000;
+
+    font-family:
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+    color:var(--text);
+}
+
+/* ───────────────────────────── */
+
+.cover{
+
+    position:fixed;
+
+    top:18px;
+    left:18px;
+    right:18px;
+    bottom:18px;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    overflow:hidden;
+
+    border:1px solid rgba(57,231,95,0.35);
+
+    border-radius:38px;
+
+    box-shadow:
+        inset 0 0 120px rgba(57,231,95,0.05),
+        0 0 60px rgba(57,231,95,0.08);
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(57,231,95,0.14),
+        transparent 55%
+    ),
+    linear-gradient(
+        180deg,
+        #050605 0%,
+        #000 100%
+    );
+}
+
+/* ───────────────────────────── */
+
+.cover img.logo{
+
+    width:150px;
+    height:150px;
+
+    object-fit:contain;
+
+    margin-bottom:20px;
+
+    filter:
+        drop-shadow(0 0 22px rgba(57,231,95,0.22))
+        drop-shadow(0 0 60px rgba(57,231,95,0.14));
+}
+
+/* ───────────────────────────── */
+
+.subtitle{
+
+    margin-bottom:10px;
+
+    font-size:0.9rem;
+
+    font-weight:700;
+
+    letter-spacing:0.34em;
+
+    color:#c8d5c8;
+
+    text-transform:uppercase;
+}
+
+/* ───────────────────────────── */
+
+h1{
+
+    margin:0;
+
+    font-size:5rem;
+
+    font-weight:950;
+
+    letter-spacing:0.16em;
+
+    color:#7cff4f;
+
+    text-shadow:
+        0 0 18px rgba(57,255,20,0.45),
+        0 0 60px rgba(57,255,20,0.18);
+}
+
+/* ───────────────────────────── */
+
+.tagline{
+
+    margin-top:30px;
+
+    font-size:0.85rem;
+
+    line-height:1.5;
+
+    color:#FFFAFA;
+
+    max-width:600px;
+
+    font-weight:500;
+    
+    text-align:justify;
+    text-justify:inter-word;
+}
+
+.tagline p {
+    margin-bottom: 8px;
+}
+
+.tagline i {
+    font-style: italic;
+}
+
+/* Evidenziazione unica per le due G iniziali dell'acronimo */
+.highlight-g {
+    color: var(--green);
+    font-size: 1.25em;
+    font-weight: 800;
+    display: inline-block;
+    text-shadow: 0 0 8px rgba(57,255,20,0.4);
+}
+
+/* Nuova classe per impedire l'andata a capo del nome completo */
+.keep-together {
+    white-space: nowrap;
+}
+
+/* ───────────────────────────── */
+
+.enter{
+
+    margin-top:35px;
+
+    padding:16px 38px;
+
+    border-radius:999px;
+
+    border:1px solid rgba(57,231,95,0.25);
+
+    background:rgba(57,231,95,0.05);
+
+    color:#7cff4f;
+
+    font-size:13px;
+
+    letter-spacing:5px;
+
+    cursor:pointer;
+
+    transition:0.25s;
+}
+
+.enter:hover{
+
+    transform:scale(1.03);
+
+    border-color:rgba(57,231,95,0.55);
+
+    box-shadow:
+        0 0 20px rgba(57,231,95,0.18),
+        0 0 60px rgba(57,231,95,0.08);
+}
+
+
+/* ── GG84 MOBILE RESPONSIVE PATCH ───────────────────────────── */
+@media (max-width: 700px){
+
+    html,
+    body{
+        min-height:100%;
+        height:auto;
+        overflow-x:hidden;
+        overflow-y:auto;
+    }
+
+    .cover{
+        position:relative;
+        top:auto;
+        left:auto;
+        right:auto;
+        bottom:auto;
+
+        min-height:calc(100svh - 24px);
+        margin:12px;
+
+        padding:
+            calc(env(safe-area-inset-top, 0px) + 26px)
+            18px
+            calc(env(safe-area-inset-bottom, 0px) + 26px);
+
+        border-radius:28px;
+
+        justify-content:flex-start;
+    }
+
+    .cover img.logo{
+        width:104px;
+        height:104px;
+        margin-bottom:14px;
+    }
+
+    .subtitle{
+        font-size:0.62rem;
+        letter-spacing:0.22em;
+        margin-bottom:8px;
+        max-width:100%;
+        line-height:1.4;
+    }
+
+    h1{
+        font-size:clamp(2.6rem, 17vw, 4.3rem);
+        letter-spacing:0.11em;
+        line-height:1;
+    }
+
+    .tagline{
+        width:100%;
+        max-width:100%;
+        margin-top:22px;
+        font-size:0.78rem;
+        line-height:1.48;
+        text-align:left;
+        text-justify:auto;
+    }
+
+    .tagline p{
+        margin-bottom:8px;
+    }
+
+    .enter{
+        margin-top:24px;
+        padding:14px 26px;
+        font-size:11px;
+        letter-spacing:3px;
+    }
+}
+
+@media (max-width: 380px){
+    .cover{
+        margin:9px;
+        padding:22px 15px;
+        border-radius:24px;
+    }
+
+    .cover img.logo{
+        width:90px;
+        height:90px;
+    }
+
+    .tagline{
+        font-size:0.72rem;
+        line-height:1.42;
+    }
+
+    .enter{
+        margin-top:18px;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 520px){
+    html,
+    body{
+        overflow:auto;
+    }
+
+    .cover{
+        position:relative;
+        min-height:calc(100svh - 20px);
+        margin:10px;
+        padding:22px 18px;
+        justify-content:center;
+    }
+
+    .cover img.logo{
+        width:82px;
+        height:82px;
+        margin-bottom:10px;
+    }
+
+    h1{
+        font-size:3rem;
+    }
+
+    .tagline{
+        margin-top:16px;
+        font-size:0.72rem;
+        line-height:1.35;
+    }
+
+    .enter{
+        margin-top:16px;
+        padding:12px 24px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="cover">
+
+    <img
+        src="logo3.png"
+        alt="GG84"
+        class="logo"
+    >
+
+    <div class="subtitle">
+        SECURE PRIVATE PROTOCOL
+    </div>
+
+    <h1>
+        GG84
+    </h1>
+
+    <div class="tagline">
+        <p>Ghost Grid 84 (GG84) è l'overlay crittografico definitivo nato per proteggersi nel 2026.</p>
+        
+        <p>Il nome GG84 fonde la distopia di <i>1984</i> di <span class="highlight-g">G</span>eorge Orwell e il cyberspazio di <i>Neuromante</i> di <span class="keep-together"><span class="highlight-g">G</span>ibson</span>, in un intreccio di date che, per quanto casuale, si dimostra rivelatore.</p>
+        
+        <p>Nel 1948, infatti, Orwell scrive l’opera distopica più importante di tutti i tempi <i>1984</i> e lo stesso anno nasce Gibson, che invece nel 1984 pubblicherà il suo capolavoro improntato sulle vicende di un hacker.</p>
+        
+        <p>In un mondo attuale dominato da algoritmi di controllo e tracciamento totale, Ghost Grid 84 (GG84) agisce come una rete "fantasma" invisibile, sospesa sopra l'internet pubblico.</p>
+        
+        <p>Questa infrastruttura permette agli utenti di riprendersi la propria privacy, offuscando i dati e creando canali cifrati inaccessibili a qualsiasi "Grande Fratello" tecnologico moderno.</p>
+    </div>
+
+    <div class="enter"
+         onclick="location.href='intro.html'">
+        ENTER
+    </div>
+
+</div>
+
+</body>
+</html>
