@@ -5,6 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>GG84 — Secure Private Protocol</title>
+<meta name="description" content="Messaggistica cifrata end-to-end, senza server e senza account. · End-to-end encrypted messaging, no server, no account."/>
+<link rel="canonical" href="https://gg84.it/"/>
+<link rel="icon" href="logo3.png"/>
+
+<!-- Anteprima per WhatsApp, LinkedIn, Telegram, Facebook.
+     Due note che sembrano dettagli e invece rompono tutto:
+     1. og:image DEVE essere un URL assoluto — i crawler scartano i percorsi relativi;
+     2. la descrizione viene troncata intorno ai 150 caratteri, quindi le due lingue
+        vanno tenute corte: prima l'italiano, poi l'inglese dopo il separatore. -->
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="GG84"/>
+<meta property="og:locale" content="it_IT"/>
+<meta property="og:locale:alternate" content="en_US"/>
+<meta property="og:url" content="https://gg84.it/"/>
+<meta property="og:title" content="GG84 — Secure Private Protocol"/>
+<meta property="og:description" content="Messaggistica cifrata end-to-end, senza server e senza account. · End-to-end encrypted messaging, no server, no account."/>
+<meta property="og:image" content="https://gg84.it/og-gg84.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="GG84 — Secure Private Protocol"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="GG84 — Secure Private Protocol"/>
+<meta name="twitter:description" content="Messaggistica cifrata end-to-end, senza server e senza account. · End-to-end encrypted messaging, no server, no account."/>
+<meta name="twitter:image" content="https://gg84.it/og-gg84.png"/>
 
 <style>
 
@@ -199,6 +223,12 @@ h1{
     cursor:pointer;
 
     transition:0.25s;
+
+    /* e' un <a> vero: serve perche' i crawler seguano il link
+       (e perche' funzioni l'apertura in una nuova scheda) */
+    display:inline-block;
+
+    text-decoration:none;
 }
 
 .enter:hover{
@@ -377,10 +407,7 @@ h1{
         <p>Questa infrastruttura permette agli utenti di riprendersi la propria privacy, offuscando i dati e creando canali cifrati inaccessibili a qualsiasi "Grande Fratello" tecnologico moderno.</p>
     </div>
 
-    <div class="enter"
-         onclick="location.href='intro.html'">
-        ENTER
-    </div>
+    <a class="enter" href="intro.html">ENTER</a>
 
 </div>
 
