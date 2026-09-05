@@ -767,9 +767,8 @@ footer{
       <a href="#come-funziona">Come funziona</a>
       <a href="#video">Video</a>
       <a href="#per-chi">Per chi</a>
-      <a href="#pricing">Prezzi</a>
     </div>
-    <a class="nav-cta" href="#pricing">Scarica l'app</a>
+    <a class="nav-cta" href="#interesse">Scrivici</a>
   </div>
 </nav>
 
@@ -788,15 +787,15 @@ footer{
         Nessun backend può essere compromesso perché non esiste.
       </p>
       <div class="hero-actions">
-        <a class="btn-primary" href="#pricing">
-          ↓ &nbsp;Scarica gratis
+        <a class="btn-primary" href="#interesse">
+          Interessati al progetto?
         </a>
         <a class="btn-ghost" href="#video">
           ▶ &nbsp;Guarda il video
         </a>
       </div>
       <p class="hero-note">
-        Disponibile su <span>Android</span> · Crittografia <span>ECDH + AES-GCM</span> · <span>Open protocol</span>
+        Progetto <span>completo e funzionante</span> · <span>Android</span> · <span>ECDH + AES-GCM</span> · Non distribuito al pubblico
       </p>
     </div>
     <div class="mockup-wrap">
@@ -902,7 +901,8 @@ footer{
         <div class="video-title">GG84 — Secure Private Protocol · Promo</div>
         <div class="video-badge">● Live</div>
       </div>
-      <video controls playsinline preload="metadata" poster="logo3.png">
+      <video controls controlsList="nodownload noplaybackrate" disablePictureInPicture
+             oncontextmenu="return false" playsinline preload="metadata" poster="logo3.png">
         <source src="gg84.mp4" type="video/mp4"/>
         Il tuo browser non supporta la riproduzione video.
       </video>
@@ -1116,58 +1116,25 @@ footer{
   </div>
 </section>
 
-<!-- ── PRICING ──────────────────────────────────────────────── -->
-<section id="pricing" style="background:var(--bg2)">
+<!-- ── CONTATTO ─────────────────────────────────────────────── -->
+<section class="cta-section" id="interesse">
   <div class="container">
-    <div class="centered">
-      <div class="section-kicker">Prezzi</div>
-      <h2>Semplice.<br>Trasparente.</h2>
-      <p class="section-sub">La versione gratuita è già completa. Il PRO sblocca messaggi illimitati per chi ne ha bisogno ogni giorno.</p>
-    </div>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-label">Free</div>
-        <div class="price-amount">€0 <span>/ sempre</span></div>
-        <div class="price-desc">Tutte le funzionalità di sicurezza. Senza scadenza.</div>
-        <div class="price-features">
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">5 messaggi cifrati al giorno</span></div>
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">ECDH + AES-GCM completo</span></div>
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">PIN coercizione (duress)</span></div>
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Rotazione identità</span></div>
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Lock app + biometria</span></div>
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Serverless · zero account</span></div>
-        </div>
-        <a class="price-btn secondary" href="#top">Scarica gratis</a>
-      </div>
-      <div class="price-card featured">
-        <div class="featured-badge">Consigliato</div>
-        <div class="price-label green">PRO</div>
-        <div class="price-amount" style="color:var(--g)">€9,99 <span>/ mese</span></div>
-        <div class="price-desc">Per chi usa GG84 come strumento di lavoro quotidiano.</div>
-        <div class="price-features">
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Messaggi cifrati <strong style="color:var(--g)">illimitati</strong></span></div>
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Cifra qualsiasi file o documento o foto</span></div>
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Priorità sugli aggiornamenti</span></div>
-          <div class="pf"><span class="pf-icon">✓</span><span class="pf-text">Supporto dedicato</span></div>
-        </div>
-        <a class="price-btn primary" href="#top">Attiva PRO</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CTA ──────────────────────────────────────────────────── -->
-<section class="cta-section" id="download">
-  <div class="container">
-    <div class="section-kicker">Inizia ora</div>
-    <h2>La crittografia che<br><em>puoi vedere.</em></h2>
-    <p>Non fidarti di nessun server — nemmeno del nostro, perché non esiste. Scarica, genera la tua identità, e comincia a proteggere le tue comunicazioni.</p>
+    <div class="section-kicker">Contatti</div>
+    <h2>Il progetto è finito<br><em>e funzionante.</em></h2>
+    <p>
+      GG84 non è distribuito al pubblico: è stato sviluppato, sottoposto ad audit di sicurezza
+      e deliberatamente non pubblicato, per una valutazione responsabile del suo potenziale.
+    </p>
+    <p style="opacity:.82;font-size:.96em">
+      <strong>Interessati al progetto?</strong> Scriveteci via mail, indicando chi siete e
+      l'ambito in cui operate. Ogni richiesta riceve risposta.
+    </p>
     <div class="cta-buttons">
-      <a class="btn-primary" href="https://play.google.com" target="_blank">
-        ↓ &nbsp;Google Play — Gratis
+      <a class="btn-primary" href="mailto:info@gg84.it?subject=Manifestazione%20di%20interesse%20-%20GG84&amp;body=Chi%20sono%3A%0AAmbito%3A%0AUso%20previsto%3A%0A%0A">
+        info@gg84.it
       </a>
-      <a class="btn-ghost" href="https://instagram.com/gg84spp" target="_blank">
-        IG &nbsp;@gg84spp
+      <a class="btn-ghost" href="https://instagram.com/gg84.it" target="_blank">
+        IG &nbsp;@gg84.it
       </a>
     </div>
   </div>
@@ -1181,12 +1148,11 @@ footer{
       <span>GG84 — Secure Private Protocol</span>
     </div>
     <div class="footer-links">
-      <a href="https://instagram.com/gg84spp" target="_blank">Instagram</a>
-      <a href="#">GitHub</a>
-      <a href="mailto:hello@gg84.it">Contatti</a>
-      <a href="#">Privacy</a>
+      <a href="https://instagram.com/gg84.it" target="_blank">Instagram</a>
+      <a href="#interesse">Scrivici</a>
+      <a href="mailto:info@gg84.it">Contatti</a>
     </div>
-    <div class="footer-copy">Serverless by design · Privacy-first · V5_240526</div>
+    <div class="footer-copy">Serverless by design · Privacy-first · Progetto non distribuito al pubblico</div>
   </div>
 </footer>
 
