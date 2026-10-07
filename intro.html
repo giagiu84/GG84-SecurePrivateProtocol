@@ -228,6 +228,45 @@ body{
     }
 }
 
+/* Telefono in verticale: il video è orizzontale e pieno di scritte.
+   Al tocco su «TAP TO ENTER» va a schermo intero e in orizzontale
+   (Android); dove non si può (iPhone) compare l'invito a ruotare. */
+#rotate{
+    position:fixed;
+    left:50%;
+    top:calc(env(safe-area-inset-top, 0px) + 22px);
+    transform:translateX(-50%);
+    z-index:16;
+    display:none;
+    align-items:center;
+    gap:10px;
+    color:rgba(255,255,255,0.78);
+    font-size:12px;
+    letter-spacing:3px;
+    padding:10px 16px;
+    border:1px solid rgba(57,231,95,0.30);
+    border-radius:30px;
+    background:rgba(0,0,0,0.55);
+    backdrop-filter:blur(10px);
+    white-space:nowrap;
+}
+
+#rotate svg{
+    width:20px;
+    height:20px;
+    flex:0 0 auto;
+    animation:gg84ruota 1.8s ease-in-out infinite;
+}
+
+@keyframes gg84ruota{
+    0%, 25%  { transform:rotate(0deg); }
+    55%, 100%{ transform:rotate(-90deg); }
+}
+
+@media (orientation: landscape){
+    #rotate{ display:none !important; }
+}
+
 @media (orientation: landscape) and (max-height: 520px){
 
     #introVideo{
@@ -295,20 +334,83 @@ body{
     TAP TO SKIP
 </div>
 
+<!-- RUOTA (solo dove lo schermo intero orizzontale non si può) -->
+
+<div id="rotate" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#39e75f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="7" y="2.5" width="10" height="19" rx="2"/>
+        <line x1="11" y1="18.5" x2="13" y2="18.5"/>
+    </svg>
+    RUOTA IL TELEFONO
+</div>
+
 <script>
 
 const video     = document.getElementById("introVideo");
 const overlay   = document.getElementById("overlay");
 const enterBtn  = document.getElementById("enter");
 const skipBtn   = document.getElementById("skip");
+const rotateTip = document.getElementById("rotate");
 
 /* ───────────────────────────── */
 
 function goHome(){
 
+    try{
+        if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+    }catch(e){}
+
     window.location.href = "home.html";
 
 }
+
+/* ───────────────────────────── */
+
+// telefono in verticale: schermo intero e orizzontale
+
+function isPortraitPhone(){
+
+    return window.matchMedia("(orientation: portrait) and (max-width: 900px)").matches;
+
+}
+
+/* Alcuni browser lasciano la richiesta in sospeso senza rispondere:
+   dopo un secondo e mezzo si rinuncia e si chiede di ruotare. */
+function withTimeout(promise, ms){
+
+    return Promise.race([
+        promise,
+        new Promise((resolve, reject) => setTimeout(() => reject(new Error("nessuna risposta")), ms))
+    ]);
+
+}
+
+async function goBigOnPhone(){
+
+    if (!isPortraitPhone()) return;
+
+    const page = document.documentElement;
+
+    if (page.requestFullscreen && screen.orientation && screen.orientation.lock){
+        try{
+            await withTimeout(page.requestFullscreen({ navigationUI: "hide" }), 1500);
+            await withTimeout(screen.orientation.lock("landscape"), 1500);
+            return;
+        }catch(err){
+            console.log(err);
+            try{
+                if (document.fullscreenElement) await document.exitFullscreen();
+            }catch(e){}
+        }
+    }
+
+    rotateTip.style.display = "flex";
+
+}
+
+window.addEventListener("orientationchange", () => {
+    if (!isPortraitPhone()) rotateTip.style.display = "none";
+});
 
 /* ───────────────────────────── */
 
@@ -330,7 +432,11 @@ async function startExperience(){
 
         video.volume = 1;
 
-        await video.play();
+        const playing = video.play();
+
+        await goBigOnPhone();
+
+        await playing;
 
     }catch(err){
 
