@@ -538,6 +538,30 @@ footer{
 .footer-copy{font-size:.82rem;color:var(--muted)}
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
+/* ── 7.0: galleria dell'app, confronto a tre colonne, offerta ── */
+.cmp-3 .cmp-row{grid-template-columns:2fr 1fr 1fr}
+.offer-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px}
+.offer-card{border:1px solid var(--border);border-radius:var(--r);padding:28px;background:var(--panel)}
+.offer-card h3{font-size:1.1rem;margin-bottom:14px;font-weight:700}
+.offer-card ul{list-style:none;margin:0;padding:0}
+.offer-card li{position:relative;padding-left:20px;margin-bottom:10px;color:var(--muted);font-size:.9rem;line-height:1.65;text-align:justify}
+.offer-card li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--g)}
+.offer-card li b{color:var(--text)}
+.offer-card.honest{border-color:rgba(242,169,27,.35);background:rgba(242,169,27,.04)}
+.offer-card.honest li::before{background:#f2a91b}
+.offer-card p{color:var(--muted);font-size:.9rem;line-height:1.7;text-align:justify}
+
+@media(max-width:960px){
+  .offer-grid{grid-template-columns:1fr}
+  .cmp-3 .cmp-row{grid-template-columns:1.7fr 1fr .8fr}
+}
+/* la tabella a tre colonne sta tutta nello schermo del telefono */
+.cmp-3 .cmp-row{min-width:0}
+@media(max-width:700px){
+  .cmp-3 .cmp-cell{padding:12px 10px;font-size:.8rem}
+  .cmp-3 .cmp-cell.feat-name{font-size:.8rem}
+}
+
 @media(max-width:960px){
   .hero-inner,.prob-grid,.use-cases-grid,.features-grid,
   .pricing-grid,.cmp-row{grid-template-columns:1fr}
@@ -778,9 +802,9 @@ footer{
       <span class="brand-tag">Secure Private Protocol</span>
     </a>
     <div class="nav-links">
-      <a href="#come-funziona">Come funziona</a>
       <a href="#video">Video</a>
       <a href="#per-chi">Per chi</a>
+      <a href="#offerta">Offerta</a>
     </div>
     <a class="nav-cta" href="#interesse">Scrivici</a>
   </div>
@@ -792,24 +816,24 @@ footer{
     <div>
       <div class="hero-badge">
         <span class="dot"></span>
-        Zero server · Zero metadata · Zero fiducia implicita
+        Zero server · Chiavi nel chip · Messaggi a tempo
       </div>
       <h1>La privacy non<br>si promette.<br><em>Si dimostra.</em></h1>
       <p class="hero-sub">
-        GG84 è il primo protocollo di messaggistica dove la crittografia è visibile.
-        Scambi chiavi pubbliche, vedi il ciphertext, lo invii su qualsiasi canale.
-        Nessun backend può essere compromesso perché non esiste.
+        GG84 protegge i messaggi che contano davvero: nessun server, chiavi chiuse
+        nel chip del telefono, messaggi che dopo 20 minuti non si aprono più.
+        E si usa con le app che hai già: vedi il messaggio cifrato prima di mandarlo.
       </p>
       <div class="hero-actions">
         <a class="btn-primary" href="#interesse">
-          Interessati al progetto?
+          Parliamone
         </a>
         <a class="btn-ghost" href="#video">
           ▶ &nbsp;Guarda il video
         </a>
       </div>
       <p class="hero-note">
-        Progetto <span>completo e funzionante</span> · <span>Android</span> · <span>ECDH + AES-GCM</span> · Non distribuito al pubblico
+        <span>GG84 7.0 «Elite»</span> · <span>Android 12+</span> · Disponibilità prevista dal <span>1° gennaio 2027</span>
       </p>
     </div>
     <div class="mockup-wrap">
@@ -827,12 +851,12 @@ footer{
               <span>● Connessione attiva · verificata</span>
             </div>
           </div>
-          <div class="msg-out">ciao, questo è un test</div>
+          <div class="msg-out">Ci vediamo domani alle 9 in studio.</div>
           <div class="msg-label">↓ GG84 cifra il messaggio</div>
-          <div class="msg-in">GG84$2$a8F9kL0pQzXk9Jf82N2sH4vLmR1Td3WnYqBc6eUj...</div>
+          <div class="msg-in">GG84$7$B7YJeQdA2XxTcHW661sNkQRD9AQSRhyir7leKK39v...</div>
           <div class="phone-lock">
             <span class="lock-icon">🔐</span>
-            <span style="font-size:.7rem">Solo il destinatario può decifrare</span>
+            <span style="font-size:.7rem">Solo il destinatario, solo entro 20 minuti</span>
           </div>
         </div>
       </div>
@@ -845,23 +869,23 @@ footer{
   <div class="container trust-inner">
     <div class="trust-item">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span><strong>ECDH P-256</strong> key exchange</span>
+      <span><strong>Chiavi nel chip</strong> · StrongBox</span>
     </div>
     <div class="trust-item">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span><strong>AES-GCM 256</strong> encryption</span>
+      <span><strong>Una chiave per messaggio</strong> · poi distrutta</span>
     </div>
     <div class="trust-item">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span><strong>Zero server</strong> · nessun backend</span>
+      <span><strong>Zero server</strong> · nessun archivio</span>
     </div>
     <div class="trust-item">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span><strong>Identità locale</strong> · nessun account</span>
+      <span><strong>Nessun account</strong> · nessun numero</span>
     </div>
     <div class="trust-item">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8L9.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span><strong>Chiavi distrutte</strong> a fine sessione</span>
+      <span><strong>Messaggi a tempo</strong> · 20 minuti</span>
     </div>
   </div>
 </div>
@@ -871,7 +895,7 @@ footer{
   <div class="container">
     <div class="section-kicker">Il problema</div>
     <h2>Le altre app ti dicono<br>che sei protetto.<br>Ma non te lo mostrano.</h2>
-    <p class="section-sub">Con Signal, WhatsApp o Telegram scrivi in chiaro, premi invio, e sei costretto a fidarti di un server che non controlli. GG84 ribalta questo modello.</p>
+    <p class="section-sub">Con le chat comuni scrivi in chiaro, premi invio e i messaggi passano dai server di altre aziende; poi restano nel telefono per anni. Chi riesce a entrare nel telefono, anche una volta sola, può leggere tutto. GG84 ribalta questo modello.</p>
     <div class="prob-grid">
       <div class="prob-card">
         <div class="prob-tag bad">Modello tradizionale</div>
@@ -886,11 +910,11 @@ footer{
       <div class="prob-card good">
         <div class="prob-tag ok">Approccio GG84</div>
         <h3>La crittografia è visibile</h3>
-        <p>Vedi il ciphertext prima di inviarlo. Capisci cosa sta uscendo dal dispositivo. Non esiste alcun server intermedio da cui dipendere o di cui fidarsi.</p>
+        <p>Vedi il messaggio cifrato prima di mandarlo: è tutto ciò che esce dal telefono. Le chiavi restano nel chip e non esiste alcun server intermedio di cui fidarsi.</p>
         <div class="step-list">
           <div class="step-row hi"><span class="step-num" style="background:rgba(57,231,95,.2)">1</span>Scrivi il messaggio</div>
-          <div class="step-row hi"><span class="step-num" style="background:rgba(57,231,95,.2)">2</span>Vedi il ciphertext generato</div>
-          <div class="step-row hi"><span class="step-num" style="background:rgba(57,231,95,.2)">3</span>Invii solo contenuto già cifrato</div>
+          <div class="step-row hi"><span class="step-num" style="background:rgba(57,231,95,.2)">2</span>GG84 lo cifra nel telefono</div>
+          <div class="step-row hi"><span class="step-num" style="background:rgba(57,231,95,.2)">3</span>Mandi solo il messaggio già cifrato</div>
         </div>
       </div>
     </div>
@@ -928,34 +952,6 @@ footer{
   </div>
 </section>
 
-<!-- ── COME FUNZIONA ────────────────────────────────────────── -->
-<section id="come-funziona">
-  <div class="container">
-    <div class="centered">
-      <div class="section-kicker">Come funziona</div>
-      <h2>Tre passi. Nessun server.<br>Nessun account.</h2>
-      <p class="section-sub">GG84 usa crittografia asimmetrica standard. Le chiavi non lasciano mai il dispositivo. Il segreto si crea tra te e chi decidi tu.</p>
-    </div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-icon">🔑</div>
-        <h3>Genera la tua identità</h3>
-        <p>Una coppia di chiavi ECDH P-256 viene generata localmente. Nessun account, nessuna registrazione, nessun numero di telefono.</p>
-      </div>
-      <div class="step">
-        <div class="step-icon">🤝</div>
-        <h3>Collegati al tuo peer</h3>
-        <p>Scambiate inviti tramite qualsiasi canale — email, WhatsApp, QR, NFC. La chiave condivisa si deriva lato client. Nessun server la vede mai.</p>
-      </div>
-      <div class="step">
-        <div class="step-icon">📨</div>
-        <h3>Invia solo ciphertext</h3>
-        <p>Il messaggio viene cifrato con AES-GCM prima dell'invio. Chi intercetta il canale vede solo stringhe illeggibili. Solo il destinatario decifra.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ── PER CHI ───────────────────────────────────────────────── -->
 <section id="per-chi">
   <div class="container">
@@ -966,32 +962,32 @@ footer{
       <div class="uc-card">
         <div class="uc-icon">📰</div>
         <div class="uc-text">
-          <h3>Giornalisti e fonti riservate</h3>
-          <p>Quando un server compromesso significa una fonte in pericolo. GG84 non ha server da sequestrare, intercettare o citare in giudizio.</p>
+          <h3>Giornalisti e fonti</h3>
+          <p>Quando un archivio violato significa una fonte esposta. Con GG84 l'archivio non esiste: non c'è un server da violare, sequestrare o citare in giudizio.</p>
           <div class="uc-tags">
-            <span class="uc-tag">Zero metadata</span>
-            <span class="uc-tag">No account</span>
-            <span class="uc-tag">Nessuna rubrica esposta</span>
+            <span class="uc-tag">Nessun server</span>
+            <span class="uc-tag">Nessun account</span>
+            <span class="uc-tag">Nessuna rubrica</span>
           </div>
         </div>
       </div>
       <div class="uc-card">
         <div class="uc-icon">⚖️</div>
         <div class="uc-text">
-          <h3>Avvocati e clienti</h3>
-          <p>Il segreto professionale non può dipendere da un server americano. Comunicazioni cifrate che non transitano mai da infrastrutture terze.</p>
+          <h3>Avvocati e studi professionali</h3>
+          <p>Il segreto professionale non dipende da un server di terzi: l'indicazione al cliente, il documento delicato, la strategia.</p>
           <div class="uc-tags">
-            <span class="uc-tag">GDPR-ready</span>
             <span class="uc-tag">Segreto professionale</span>
-            <span class="uc-tag">Zero log</span>
+            <span class="uc-tag">Chiavi nel chip</span>
+            <span class="uc-tag">Messaggi a tempo</span>
           </div>
         </div>
       </div>
       <div class="uc-card">
         <div class="uc-icon">🏢</div>
         <div class="uc-text">
-          <h3>Executive e aziende</h3>
-          <p>M&A, brevetti, strategie. Comunicazioni che se trapelassero avrebbero un costo misurabile. GG84 non ha nessun database da violare.</p>
+          <h3>Aziende e manager</h3>
+          <p>Trattative, brevetti, acquisizioni: comunicazioni che, se trapelassero, avrebbero un costo misurabile. GG84 non ha nessun database da violare.</p>
           <div class="uc-tags">
             <span class="uc-tag">M&A</span>
             <span class="uc-tag">Brevetti</span>
@@ -1002,12 +998,12 @@ footer{
       <div class="uc-card">
         <div class="uc-icon">🛡️</div>
         <div class="uc-text">
-          <h3>Situazioni di rischio personale</h3>
-          <p>Il <strong style="color:var(--g)">PIN coercizione</strong>: un secondo PIN che simula lo sblocco ma azzera silenziosamente tutto. Pensato per chi può essere costretto a sbloccare il telefono.</p>
+          <h3>Persone in situazioni di rischio</h3>
+          <p>Chi può essere costretto a sbloccare il telefono trova nel <strong style="color:var(--g)">PIN di coercizione</strong> una via d'uscita silenziosa: sembra aprire l'app, ma distrugge identità e chiavi dentro il chip.</p>
           <div class="uc-tags">
-            <span class="uc-tag">Duress PIN</span>
-            <span class="uc-tag">Wipe automatico</span>
-            <span class="uc-tag">Zero tracce</span>
+            <span class="uc-tag">PIN di coercizione</span>
+            <span class="uc-tag">Distruzione nel chip</span>
+            <span class="uc-tag">Niente tracce</span>
           </div>
         </div>
       </div>
@@ -1019,45 +1015,63 @@ footer{
 <section class="features-section">
   <div class="container">
     <div class="centered">
-      <div class="section-kicker">Funzionalità</div>
+      <div class="section-kicker">Perché è diverso</div>
       <h2>Sicurezza a più livelli.<br>Visibile da tutti.</h2>
     </div>
     <div class="features-grid">
       <div class="feat">
-        <div class="feat-icon">🔐</div>
-        <h3>Lock app + Biometria</h3>
-        <p>PIN 6 cifre e/o impronta digitale. Blocco automatico dopo inattività o rientro da background.</p>
-        <span class="feat-badge">Standard</span>
+        <div class="feat-icon">🗄️</div>
+        <h3>Nessun server</h3>
+        <p>GG84 non ha un archivio centrale: non c'è niente da violare, da sequestrare o da cedere. Il messaggio esiste solo, cifrato, nella chat che hai scelto tu.</p>
+        <span class="feat-badge">Serverless</span>
       </div>
       <div class="feat">
-        <div class="feat-icon">⚠️</div>
-        <h3>PIN Coercizione</h3>
-        <p>Un secondo PIN che simula lo sblocco ma cancella identità, chiavi e sessioni. Dall'esterno è indistinguibile.</p>
-        <span class="feat-badge">Esclusiva GG84</span>
+        <div class="feat-icon">🔒</div>
+        <h3>Chiavi chiuse nel chip</h3>
+        <p>Le chiavi nascono dentro il chip di sicurezza del telefono (StrongBox, o l'area sicura del processore se manca) e non ne escono mai, nemmeno per GG84 stessa.</p>
+        <span class="feat-badge">StrongBox</span>
       </div>
       <div class="feat">
         <div class="feat-icon">🔄</div>
-        <h3>Rotazione identità</h3>
-        <p>A ogni chiusura sessione le chiavi vengono distrutte e una nuova identità viene generata. Forward secrecy assoluta.</p>
+        <h3>Una chiave per ogni messaggio</h3>
+        <p>Ogni messaggio usa una chiave nuova, distrutta subito dopo. Chi copiasse il telefono resterebbe fuori alla prima risposta: lo stesso principio del protocollo Signal, con le chiavi nel chip.</p>
+        <span class="feat-badge">Ratchet doppio</span>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">⏱️</div>
+        <h3>Messaggi a tempo</h3>
+        <p>Ogni messaggio vive 20 minuti dal momento in cui è scritto, poi non si apre più per nessuno. Un messaggio già letto non si riapre.</p>
+        <span class="feat-badge">20 minuti</span>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📞</div>
+        <h3>Verifica a voce</h3>
+        <p>Al collegamento ognuno detta all'altro un codice: numero, tre lettere, un colore. Se fra i due ci fosse un intruso, i codici non coinciderebbero.</p>
+        <span class="feat-badge">Anti-intercettazione</span>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">⚠️</div>
+        <h3>PIN di coercizione</h3>
+        <p>Un secondo PIN che sembra aprire l'app ma distrugge identità e chiavi dentro il chip. Dall'esterno è indistinguibile.</p>
         <span class="feat-badge">Esclusiva GG84</span>
       </div>
       <div class="feat">
+        <div class="feat-icon">💬</div>
+        <h3>Con le app che hai già</h3>
+        <p>Il codice cifrato viaggia su WhatsApp, Telegram o qualunque chat. Dalla selezione del testo, «Sostituisci e torna» mette il cifrato al posto del chiaro.</p>
+        <span class="feat-badge">Sopra le chat</span>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">👣</div>
+        <h3>Niente tracce</h3>
+        <p>Nessun account, nessun numero di telefono, nessuna rubrica. La pagina dei messaggi non si lascia fotografare dallo schermo; chiuso il collegamento, le chiavi vengono distrutte.</p>
+        <span class="feat-badge">Zero tracce</span>
+      </div>
+      <div class="feat">
         <div class="feat-icon">🛑</div>
-        <h3>Lockout escalante</h3>
-        <p>3 PIN sbagliati → 60s di attesa. 6 errati → 120s. 9 errati → wipe totale automatico dell'app.</p>
+        <h3>Blocco e tentativi</h3>
+        <p>PIN di 6 cifre o impronta, blocco dopo 2 minuti fuori dall'app. Attese crescenti dopo gli errori; al nono PIN sbagliato GG84 si cancella da sola.</p>
         <span class="feat-badge">Anti brute-force</span>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">👁️</div>
-        <h3>Fingerprint visivo</h3>
-        <p>Colore + codice numerico unici per ogni sessione. Verifichi di persona che non ci sia nessun intermediario.</p>
-        <span class="feat-badge">Anti-MITM</span>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">📵</div>
-        <h3>Funziona offline</h3>
-        <p>Il pairing avviene via file. I messaggi si cifrano localmente. Non serve connessione internet per l'operazione critica.</p>
-        <span class="feat-badge">Serverless</span>
       </div>
     </div>
   </div>
@@ -1067,64 +1081,94 @@ footer{
 <section>
   <div class="container">
     <div class="section-kicker">Confronto</div>
-    <h2>GG84 vs le alternative.</h2>
-    <p class="section-sub">Non è una questione di crittografia — Signal usa crittografia forte. È una questione di chi deve esistere per far funzionare il sistema.</p>
-    <div class="cmp-table">
+    <h2>GG84 e le chat comuni.</h2>
+    <p class="section-sub">Non è una questione di crittografia: molte chat cifrano bene. È una questione di dove stanno le chiavi e di chi deve esistere perché il sistema funzioni.</p>
+    <div class="cmp-table cmp-3">
       <div class="cmp-row header">
         <div class="cmp-cell feat-name">Caratteristica</div>
+        <div class="cmp-cell">Chat comuni</div>
         <div class="cmp-cell gg84-col">GG84</div>
-        <div class="cmp-cell">Signal</div>
-        <div class="cmp-cell hide-m">WhatsApp</div>
-        <div class="cmp-cell hide-m">Threema</div>
       </div>
       <div class="cmp-row">
-        <div class="cmp-cell feat-name">Serverless reale</div>
-        <div class="cmp-cell"><span class="yes">✓</span></div>
-        <div class="cmp-cell"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell feat-name">I messaggi passano da un server del fornitore</div>
+        <div class="cmp-cell"><span class="no">sì</span></div>
+        <div class="cmp-cell"><span class="yes">no</span></div>
       </div>
       <div class="cmp-row">
-        <div class="cmp-cell feat-name">Nessun numero di telefono</div>
-        <div class="cmp-cell"><span class="yes">✓</span></div>
-        <div class="cmp-cell"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="yes">✓</span></div>
+        <div class="cmp-cell feat-name">Serve un account o un numero di telefono</div>
+        <div class="cmp-cell"><span class="no">di solito sì</span></div>
+        <div class="cmp-cell"><span class="yes">no</span></div>
       </div>
       <div class="cmp-row">
-        <div class="cmp-cell feat-name">Identità ruotata a ogni sessione</div>
-        <div class="cmp-cell"><span class="yes">✓</span></div>
-        <div class="cmp-cell"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell feat-name">Chiavi custodite in un chip di sicurezza dedicato</div>
+        <div class="cmp-cell"><span class="partial">di rado</span></div>
+        <div class="cmp-cell"><span class="yes">sempre</span></div>
       </div>
       <div class="cmp-row">
-        <div class="cmp-cell feat-name">PIN coercizione (duress)</div>
-        <div class="cmp-cell"><span class="yes">✓</span></div>
-        <div class="cmp-cell"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell feat-name">Una chiave nuova per ogni messaggio, poi distrutta</div>
+        <div class="cmp-cell"><span class="partial">nelle migliori</span></div>
+        <div class="cmp-cell"><span class="yes">sì</span></div>
       </div>
       <div class="cmp-row">
-        <div class="cmp-cell feat-name">Nessun metadata centralizzato</div>
-        <div class="cmp-cell"><span class="yes">✓</span></div>
-        <div class="cmp-cell"><span class="partial">parziale</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="partial">parziale</span></div>
+        <div class="cmp-cell feat-name">Il messaggio non si apre più dopo 20 minuti</div>
+        <div class="cmp-cell"><span class="no">no</span></div>
+        <div class="cmp-cell"><span class="yes">sì</span></div>
       </div>
       <div class="cmp-row">
-        <div class="cmp-cell feat-name">Trasporto a scelta dell'utente</div>
-        <div class="cmp-cell"><span class="yes">✓</span></div>
-        <div class="cmp-cell"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell feat-name">Verifica a voce obbligatoria prima di scrivere</div>
+        <div class="cmp-cell"><span class="partial">facoltativa o assente</span></div>
+        <div class="cmp-cell"><span class="yes">sì</span></div>
       </div>
       <div class="cmp-row">
-        <div class="cmp-cell feat-name">Funziona senza connessione internet</div>
-        <div class="cmp-cell"><span class="yes">✓</span></div>
-        <div class="cmp-cell"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
-        <div class="cmp-cell hide-m"><span class="no">✗</span></div>
+        <div class="cmp-cell feat-name">PIN di coercizione che distrugge le chiavi</div>
+        <div class="cmp-cell"><span class="no">di solito no</span></div>
+        <div class="cmp-cell"><span class="yes">sì</span></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-cell feat-name">Funziona sopra le chat che si usano già</div>
+        <div class="cmp-cell"><span class="partial">—</span></div>
+        <div class="cmp-cell"><span class="yes">sì</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── OFFERTA ──────────────────────────────────────────────── -->
+<section id="offerta">
+  <div class="container">
+    <div class="section-kicker">L'offerta</div>
+    <h2>GG84 7.0 «Elite».</h2>
+    <p class="section-sub">Un prodotto riservato, senza versioni gratuite e senza server, nemmeno per le licenze.</p>
+    <div class="offer-grid">
+      <div class="offer-card">
+        <h3>Il modello «Elite»</h3>
+        <ul>
+          <li><b>Licenza annuale</b>, con scadenza unica il 31 dicembre per tutti; il prezzo è in proporzione ai mesi rimasti. <b>Prezzo su richiesta.</b></li>
+          <li><b>Attivazione</b> con un codice firmato dalla casa madre, legato al telefono.</li>
+          <li><b>Nessuna versione gratuita o di prova</b>: le dimostrazioni avvengono con un video.</li>
+          <li><b>Requisiti</b>: telefono Android 12 o successivo. Disponibilità prevista dal 1° gennaio 2027.</li>
+        </ul>
+      </div>
+      <div class="offer-card">
+        <h3>In arrivo</h3>
+        <ul>
+          <li><b>Foto e vocali cifrati</b>, visibili una volta sola e solo dentro GG84.</li>
+          <li><b>GG84 Key</b> (2027): un portachiavi a forma del lucchetto GG84 con un chip di sicurezza, per avere più contatti contemporanei e cambiare telefono senza perdere niente.</li>
+          <li><b>Tastiera GG84</b> per cifrare con un tasto dentro le altre app; poi <b>iPhone</b>.</li>
+        </ul>
+      </div>
+      <div class="offer-card">
+        <h3>Clienti selezionati</h3>
+        <p>GG84 è un prodotto riservato: ogni licenza è <b style="color:var(--text)">nominativa</b> e intestata a un cliente identificato. Nel prodotto <b style="color:var(--text)">non esistono porte di servizio</b>, per nessuno: nemmeno per noi.</p>
+      </div>
+      <div class="offer-card honest">
+        <h3>Detto con onestà</h3>
+        <ul>
+          <li>Nessuna app protegge un telefono già infettato mentre si legge o si scrive. GG84 si rifiuta di usare le chiavi se rileva un telefono manomesso.</li>
+          <li>La chat che trasporta il codice vede che due persone si scrivono, non che cosa si scrivono.</li>
+          <li>Con la sola app, un collegamento alla volta; più contatti con la GG84 Key.</li>
+          <li>Oggi la sicurezza è verificata da centinaia di prove automatiche e da prove sul campo; un audit indipendente è previsto nel 2027.</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -1134,18 +1178,17 @@ footer{
 <section class="cta-section" id="interesse">
   <div class="container">
     <div class="section-kicker">Contatti</div>
-    <h2>Il progetto è finito<br><em>e funzionante.</em></h2>
+    <h2>Parliamone.<br><em>Ti mostriamo GG84.</em></h2>
     <p>
-      GG84 non è distribuito al pubblico: è stato sviluppato, sottoposto ad audit di sicurezza
-      e deliberatamente non pubblicato, per una valutazione responsabile del suo potenziale.
+      GG84 7.0 è in collaudo, con disponibilità prevista dal 1° gennaio 2027. Ti mostriamo
+      l'app in un video di pochi minuti e valutiamo insieme se fa per te.
     </p>
     <p style="opacity:.82;font-size:.96em">
-      <strong>Interessati al progetto?</strong> Scriveteci via mail, indicando chi siete e
-      l'ambito in cui operate. Ogni richiesta riceve risposta.
+      <strong>Scrivici</strong> indicando chi sei e l'ambito in cui operi. Ogni richiesta riceve risposta.
     </p>
     <div class="cta-buttons">
-      <a class="btn-primary" href="mailto:info@gg84.it?subject=Manifestazione%20di%20interesse%20-%20GG84&amp;body=Chi%20sono%3A%0AAmbito%3A%0AUso%20previsto%3A%0A%0A">
-        info@gg84.it
+      <a class="btn-primary" href="mailto:partnership@gg84.it?subject=Manifestazione%20di%20interesse%20-%20GG84&amp;body=Chi%20sono%3A%0AAmbito%3A%0AUso%20previsto%3A%0A%0A">
+        partnership@gg84.it
       </a>
       <a class="btn-ghost" href="https://instagram.com/gg84.it" target="_blank">
         IG &nbsp;@gg84.it
@@ -1164,9 +1207,9 @@ footer{
     <div class="footer-links">
       <a href="https://instagram.com/gg84.it" target="_blank">Instagram</a>
       <a href="#interesse">Scrivici</a>
-      <a href="mailto:info@gg84.it">Contatti</a>
+      <a href="mailto:partnership@gg84.it">Contatti</a>
     </div>
-    <div class="footer-copy">Serverless by design · Privacy-first · Progetto non distribuito al pubblico</div>
+    <div class="footer-copy">Serverless by design · Chiavi nel chip · Disponibilità prevista dal 1° gennaio 2027</div>
   </div>
 </footer>
 
