@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GG84 — Secure Private Protocol</title>
+<meta name="description" content="Comunicazioni cifrate, senza server e senza account. Licenza nominativa, nessuna porta di servizio. · Encrypted communications, no server, no account.">
+<meta name="theme-color" content="#050806">
+<link rel="canonical" href="https://gg84.it/">
+<link rel="icon" type="image/png" href="risorse/favicon.png">
+<link rel="apple-touch-icon" href="risorse/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GG84">
+<meta property="og:locale" content="it_IT">
+<meta property="og:url" content="https://gg84.it/">
+<meta property="og:title" content="GG84 — Secure Private Protocol">
+<meta property="og:description" content="Comunicazioni cifrate, senza server e senza account. Licenza nominativa, nessuna porta di servizio.">
+<meta property="og:image" content="https://gg84.it/og-gg84.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="GG84 — Secure Private Protocol">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GG84 — Secure Private Protocol">
+<meta name="twitter:description" content="Comunicazioni cifrate, senza server e senza account.">
+<meta name="twitter:image" content="https://gg84.it/og-gg84.png">
+<link rel="preload" href="risorse/font/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="risorse/font/poppins-800-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="risorse/stile.css">
+</head>
+<body>
+
+<!-- Tutto è ospitato qui: nessun carattere, script o servizio esterno, nessun cookie. -->
+<canvas id="bit" aria-hidden="true"></canvas>
+<div class="progresso" aria-hidden="true"><span></span></div>
+
+<header class="barra" id="barra">
+  <a class="barra-marchio" href="#ingresso" aria-label="GG84, torna all'inizio">
+    <img src="risorse/lucchetto.png" alt="" width="18" height="25"><span>GG84</span>
+  </a>
+  <nav class="barra-menu" aria-label="Sezioni">
+    <a href="#nome">Il nome</a>
+    <a href="#principi">Principi</a>
+    <a href="#come">Come funziona</a>
+    <a href="#per-chi">Per chi</a>
+  </nav>
+  <a class="barra-contatti" href="#contatti">Contattaci</a>
+</header>
+
+<main>
+
+  <!-- ENTRATA: poco, serio -->
+  <section class="ingresso" id="ingresso">
+    <div class="griglia" aria-hidden="true"></div>
+    <div class="ingresso-centro">
+      <div class="lucchetto-alone"><img class="lucchetto" src="risorse/lucchetto.png" alt="Il lucchetto di GG84" width="376" height="520"></div>
+      <h1 class="marchio">GG84</h1>
+      <p class="sotto">SECURE PRIVATE PROTOCOL</p>
+      <p class="motto">Comunicazioni riservate. <span>Senza compromessi.</span></p>
+    </div>
+    <a class="scorri" href="#nome"><span>Scorri</span><i aria-hidden="true"></i></a>
+  </section>
+
+  <!-- IL NOME -->
+  <section class="nome" id="nome">
+    <div class="contenitore">
+      <p class="etichetta" data-rivela>IL NOME</p>
+      <h2 data-rivela>Ghost Grid 84</h2>
+      <p class="introduzione" data-rivela><b>Ghost Grid 84 (GG84)</b> è un overlay crittografico nato nel 2026 per proteggere le comunicazioni riservate. Il suo nome fonde la distopia di <i>1984</i> di <b>G</b>eorge Orwell e il cyberspazio di <i>Neuromante</i> di William <b>G</b>ibson, in un intreccio di date che, per quanto casuale, si dimostra rivelatore.</p>
+
+      <div class="formula" id="formula" aria-label="G di George Orwell, G di William Gibson, 84 di 1984: GG84">
+        <div class="tessera" data-da="-1"><span>G</span><small>George Orwell</small></div>
+        <div class="tessera" data-da="0"><span>G</span><small>William Gibson</small></div>
+        <div class="tessera" data-da="1"><span>84</span><small>1984</small></div>
+      </div>
+
+      <ol class="linea-tempo" id="linea-tempo">
+        <li data-rivela><span class="anno">1948</span><p>Orwell scrive <i>1984</i>, l'opera distopica più importante di tutti i tempi. Nello stesso anno nasce William Gibson.</p></li>
+        <li data-rivela><span class="anno">1984</span><p>Gibson pubblica <i>Neuromante</i>, il suo capolavoro, costruito sulle vicende di un hacker nel cyberspazio.</p></li>
+        <li data-rivela><span class="anno">2026</span><p>Nasce Ghost Grid 84: una rete «fantasma», invisibile, sospesa sopra l'internet pubblico.</p></li>
+      </ol>
+
+      <p class="chiusura" data-rivela>In un mondo dominato da algoritmi di controllo e tracciamento totale, GG84 permette di riprendersi la propria privacy: canali cifrati, inaccessibili a qualsiasi «Grande Fratello» tecnologico.</p>
+    </div>
+  </section>
+
+  <!-- NUMERI -->
+  <section class="numeri" aria-label="GG84 in numeri">
+    <div class="contenitore numeri-griglia">
+      <div data-rivela><b data-conta="0">0</b><span>server</span></div>
+      <div data-rivela><b data-conta="0">0</b><span>account</span></div>
+      <div data-rivela><b data-conta="256">256</b><span>bit di cifratura</span></div>
+      <div data-rivela><b data-conta="2">2</b><span>livelli: classico e post-quantistico</span></div>
+    </div>
+  </section>
+
+  <!-- PRINCIPI: il lucchetto resta fermo, i principi scorrono -->
+  <section class="principi" id="principi">
+    <div class="palco">
+      <div class="palco-testo">
+        <p class="etichetta">PRINCIPI <span class="indice"><b id="indice">01</b> / 05</span></p>
+        <h2>Cinque principi. <em>Nessun compromesso.</em></h2>
+        <div class="frasi">
+          <div class="frase attiva"><h3>Nessun server.</h3><p>Non esiste un archivio centrale dei tuoi messaggi: non c'è niente da violare.</p></div>
+          <div class="frase"><h3>Chiavi custodite dal chip.</h3><p>Restano nell'hardware sicuro del tuo telefono. Non da noi, non da altri.</p></div>
+          <div class="frase"><h3>Classica e post-quantistica.</h3><p>Due lucchetti in uno: una protezione pronta anche per i computer di domani.</p></div>
+          <div class="frase"><h3>Chiavi nuove a ogni messaggio.</h3><p>Quelle vecchie spariscono, e con loro la possibilità di riaprire il passato.</p></div>
+          <div class="frase"><h3>Firmato, sempre.</h3><p>Ogni messaggio porta un sigillo: se qualcuno lo altera, si vede.</p></div>
+        </div>
+      </div>
+      <div class="palco-lucchetto" aria-hidden="true">
+        <svg class="anello" viewBox="0 0 200 200">
+          <circle class="anello-fondo" cx="100" cy="100" r="92"/>
+          <circle class="anello-pieno" id="anello" cx="100" cy="100" r="92"/>
+        </svg>
+        <div class="tacche"><i></i><i></i><i></i><i></i><i></i></div>
+        <img src="risorse/lucchetto.png" alt="" width="376" height="520">
+      </div>
+    </div>
+  </section>
+
+  <!-- COME FUNZIONA -->
+  <section class="come" id="come">
+    <div class="contenitore">
+      <p class="etichetta" data-rivela>COME FUNZIONA</p>
+      <h2 data-rivela>Tre passi, <em>nessuna complicazione.</em></h2>
+      <div class="passi" id="passi">
+        <svg class="passi-filo" aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 100 2"><line id="passi-filo" x1="0" y1="1" x2="100" y2="1"/></svg>
+        <div class="passo" data-rivela><span class="n">01</span><h3>Colleghi chi vuoi</h3><p>Basta una volta: da quel momento i vostri telefoni si riconoscono, e solo loro possono leggersi.</p></div>
+        <div class="passo" data-rivela><span class="n">02</span><h3>Scrivi come sempre</h3><p>Messaggi, foto e vocali: GG84 li cifra sul telefono, prima che partano.</p></div>
+        <div class="passo" data-rivela><span class="n">03</span><h3>Invia dove vuoi</h3><p>Sui canali che conosci già. Il messaggio arriva cifrato e firmato: lo apre solo chi ha la chiave giusta.</p></div>
+      </div>
+      <p class="riquadro" data-rivela>Un <b>overlay crittografico</b>: uno strato di sicurezza che si appoggia sopra gli strumenti di tutti i giorni, senza chiederti di cambiarli.</p>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="video" id="video">
+    <div class="contenitore video-griglia">
+      <div class="video-testo">
+        <p class="etichetta" data-rivela>IN CINQUANTA SECONDI</p>
+        <h2 data-rivela>La cifratura, <em>vista da dentro.</em></h2>
+        <p data-rivela>Dal chip del telefono al messaggio sigillato: quello che succede, in silenzio, ogni volta che scrivi con GG84.</p>
+        <button class="audio" id="audio" type="button" data-rivela aria-pressed="false">Attiva l'audio</button>
+      </div>
+      <div class="telefono" id="telefono">
+        <video id="reel" src="risorse/gg84_reel.mp4" poster="risorse/gg84_reel_poster.jpg" muted loop playsinline preload="none" aria-label="Video di presentazione di GG84"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- PER CHI -->
+  <section class="per-chi" id="per-chi">
+    <div class="contenitore">
+      <p class="etichetta" data-rivela>PER CHI</p>
+      <h2 data-rivela>Per chi ha conversazioni <em>da proteggere.</em></h2>
+      <div class="tessere">
+        <div class="carta" data-rivela><h3>Giornalisti</h3><p>Le fonti restano protette.</p></div>
+        <div class="carta" data-rivela><h3>Avvocati</h3><p>Il segreto professionale resta segreto.</p></div>
+        <div class="carta" data-rivela><h3>Medici</h3><p>I dati dei pazienti restano riservati.</p></div>
+        <div class="carta" data-rivela><h3>Imprese</h3><p>Trattative, progetti e brevetti al riparo.</p></div>
+        <div class="carta" data-rivela><h3>Politici e amministratori</h3><p>Le decisioni restano riservate fino al momento giusto.</p></div>
+        <div class="carta" data-rivela><h3>Attivisti</h3><p>La libertà di parola, al sicuro.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LICENZA: le parole si accendono mentre scorri -->
+  <section class="licenza" id="licenza">
+    <div class="contenitore">
+      <p class="etichetta" data-rivela>LICENZA</p>
+      <p class="dichiarazione" id="dichiarazione">Licenza nominativa. <em>Nessuna porta di servizio.</em></p>
+      <p class="licenza-testo" data-rivela>GG84 non si scarica da uno store: viene concesso con licenza nominativa, a persone e organizzazioni certificate. Ogni licenza ha un nome, e le chiavi restano soltanto a chi la usa.</p>
+      <p class="italia" data-rivela><b>Progettata e sviluppata in Italia.</b> Nessun dato passa da noi.</p>
+    </div>
+  </section>
+
+  <!-- CONTATTI -->
+  <section class="contatti" id="contatti">
+    <div class="contenitore">
+      <p class="etichetta" data-rivela>CONTATTI</p>
+      <h2 data-rivela>Parliamone.</h2>
+      <p data-rivela>Scrivici indicando chi sei e l'ambito in cui operi. Ogni richiesta riceve risposta.</p>
+      <a class="bottone" href="mailto:info@gg84.it" data-rivela>info@gg84.it</a>
+      <p class="social" data-rivela><a href="https://instagram.com/gg84.it" rel="noopener">Instagram · @gg84.it</a></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="piede">
+  <div class="contenitore piede-griglia">
+    <div class="piede-marchio"><img src="risorse/lucchetto.png" alt="" width="22" height="30"><span><b>GG84</b> — Secure Private Protocol</span></div>
+    <p>Progettata e sviluppata in Italia · © 2026<br>Questo sito non usa cookie né strumenti di tracciamento.</p>
+  </div>
+</footer>
+
+<script src="risorse/scorrimento.js"></script>
+</body>
+</html>
