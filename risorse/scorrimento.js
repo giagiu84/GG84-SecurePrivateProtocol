@@ -97,11 +97,13 @@
         formula.style.setProperty("--unite", e);
         tessere.forEach(t => { const s = t.querySelector("small"); if (s) s.style.opacity = String(0.35 + 0.65 * e); });
       }
-      /* telefono che si raddrizza entrando */
+      /* telefono che si raddrizza entrando dal basso; da lì in poi resta perfettamente dritto */
       if (telefono) {
-        const k = avanzamento(telefono, 1, 0);
-        telefono.style.setProperty("--ry", `${(0.5 - k) * 26}deg`);
-        telefono.style.setProperty("--rx", `${(k - 0.5) * 10}deg`);
+        const r = telefono.getBoundingClientRect();
+        const k = limita((h - r.top) / (h * 0.55));              // 0 appena spunta, 1 quando è ben dentro lo schermo
+        const resto = Math.pow(1 - k, 2);
+        telefono.style.setProperty("--ry", `${(resto * 16).toFixed(2)}deg`);
+        telefono.style.setProperty("--rx", `${(resto * 6).toFixed(2)}deg`);
       }
     }
 
@@ -144,6 +146,9 @@
   const pianifica = () => { if (!inAttesa) { inAttesa = true; requestAnimationFrame(() => { inAttesa = false; aggiorna(); }); } };
   addEventListener("scroll", pianifica, { passive: true });
   addEventListener("resize", pianifica);
+  /* immagini, caratteri e video che finiscono di caricare spostano la pagina senza scorrimento: si ricalcola */
+  addEventListener("load", pianifica);
+  if ("ResizeObserver" in window) new ResizeObserver(pianifica).observe(document.body);
   aggiorna();
 
   /* ── sfondo: polvere di bit che sale piano, segue appena lo scorrimento ── */
